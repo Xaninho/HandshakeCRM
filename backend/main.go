@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/controllers"
 )
 
 func init() {
@@ -14,11 +15,11 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong2",
-		})
-	})
+	r.POST("/company", controllers.CompanyCreate)
+	r.GET("/company", controllers.CompanyIndex)
+	r.GET("/company/:id", controllers.CompanyShow)
+	r.PUT("/company/:id", controllers.CompanyUpdate)
+	r.DELETE("/company/:id", controllers.CompanyDelete)
 
 	r.Run()
 }
