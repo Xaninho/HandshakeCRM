@@ -5,12 +5,14 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
     "nuxt": "^3.0.0"
   },
   "dependencies": {
+    "jsdoc": "^4.0.0",
     "primeicons": "^6.0.1",
     "primevue": "^3.22.3"
   }
