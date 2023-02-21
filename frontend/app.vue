@@ -1,6 +1,15 @@
+<script setup>
+useHead({
+  title: 'Nuxt 3 PrimeVue Starter',
+})
+</script>
+
 <template>
-  <div>
-    <InputText/>
-    <Button label="Prime Nuxt" icon="pi pi-check"></Button>
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
+
+<style lang='scss'>
+@import 'App.scss';
+</style>
