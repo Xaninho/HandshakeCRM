@@ -20,7 +20,7 @@
 
 import { useToast } from 'primevue/usetoast'
 import { usePrimeVue } from 'primevue/config'
-import AppTopBar from '../components/app/AppTopbar.vue'
+import AppTopBar from '../components/app/AppTopBar.vue'
 import AppMenu from '../components/app/AppMenu.vue'
 import AppFooter from '../components/app/AppFooter.vue'
 import { useNavigationMenu } from '~/composables/navigation'

@@ -1,12 +1,12 @@
 <template>
     <div class="layout-menu-container">
-      <AppSubmenu :items="model" class="layout-menu" :root="true" @menu-item-click="onMenuItemClick" />
+      <AppSubMenu :items="model" class="layout-menu" :root="true" @menu-item-click="onMenuItemClick" />
     </div>
 </template>
 
 <script setup lang='ts'>
 
-    import AppSubmenu from './AppSubmenu.vue'
+    import AppSubMenu from './AppSubMenu.vue'
     const props = defineProps<{
     model: Array<any>
     }>()
