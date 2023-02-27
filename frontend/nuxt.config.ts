@@ -1,4 +1,5 @@
 import pkg from './package.json'
+import svgLoader from 'vite-svg-loader'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -14,7 +15,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxt/content',
-    '@vueuse/nuxt',
+    '@vueuse/nuxt'
   ],
   content: {
     highlight: {
@@ -45,4 +46,9 @@ export default defineNuxtConfig({
     '@sfxcode/formkit-primevue/dist/sass/formkit-prime-inputs.scss',
     '@sfxcode/formkit-primevue/dist/sass/formkit-primevue.scss',
   ],
+  vite: {
+    plugins: [
+      svgLoader()
+    ]
+  }
 })

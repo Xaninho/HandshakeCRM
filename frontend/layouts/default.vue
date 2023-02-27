@@ -1,20 +1,28 @@
 <template>
+    
     <Link rel="stylesheet" :href="themeStore.link || 'https://cdn.jsdelivr.net/npm/primevue@3.15.0/resources/themes/vela-blue/theme.css'" />
+    
     <div :class="containerClass" @click="onWrapperClick">
+
       <AppTopBar @menu-toggle="onMenuToggle" />
+
       <div class="layout-sidebar" @click="onSidebarClick">
         <AppMenu :model="navigation.navigationMenu()" @menu-item-click="onMenuItemClick" />
       </div>
   
       <div class="layout-main-container">
+
         <div class="layout-main">
           <slot />
         </div>
-        <AppFooter />
-      </div>
-    </div>
-  </template>
 
+        <AppFooter />
+        
+      </div>
+
+    </div>
+
+</template>
 
 <script setup lang='ts'>
 
@@ -28,7 +36,6 @@ import { useThemeStore } from '@/stores'
 
 const layoutMode = ref('static')
 const themeStore = useThemeStore()
-const layoutColorMode = ref('light')
 const staticMenuInactive = ref(false)
 const overlayMenuActive = ref(false)
 const mobileMenuActive = ref(false)
@@ -91,14 +98,6 @@ function onMenuItemClick(event: any) {
   }
 }
 
-function onLayoutChange(mode: string) {
-  layoutMode.value = mode
-}
-
-function onLayoutColorChange(mode: string) {
-  layoutColorMode.value = mode
-}
-
 function addClass(element: HTMLElement, className: string) {
   if (element.classList)
     element.classList.add(className)
@@ -117,16 +116,6 @@ function isDesktop() {
   return window.innerWidth >= 992
 }
 
-function isSidebarVisible() {
-  if (isDesktop()) {
-    if (layoutMode.value === 'static')
-      return !staticMenuInactive.value
-    else if (layoutMode.value === 'overlay')
-      return overlayMenuActive.value
-  }
-  return true
-}
-
 const containerClass = computed(() => ['layout-wrapper', {
   'layout-overlay': layoutMode.value === 'overlay',
   'layout-static': layoutMode.value === 'static',
@@ -137,9 +126,5 @@ const containerClass = computed(() => ['layout-wrapper', {
   'p-ripple-disabled': primeVue.config.ripple === false,
   'layout-theme-light': false,
 }])
-
-function logo() {
-  return layoutColorMode.value === 'dark' ? 'images/logo-white.svg' : 'images/logo.svg'
-}
 
 </script>

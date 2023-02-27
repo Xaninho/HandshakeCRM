@@ -12,7 +12,7 @@
               <div class="layout-menuitem-root-text">
                 {{ item.label }}
               </div>
-              <AppSubmenu
+              <AppSubMenu
                 :items="visible(item) && item.items"
                 @menu-item-click="$emit('menuItemClick', $event)"
               />
@@ -39,7 +39,7 @@
                 <span v-if="item.badge" class="menuitem-badge">{{ item.badge }}</span>
               </a>
               <transition name="layout-submenu-wrapper">
-                <AppSubmenu
+                <AppSubMenu
                   v-show="activeIndex === i" :items="visible(item) && item.items"
                   @menu-item-click="$emit('menuItemClick', $event)"
                 />

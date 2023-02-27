@@ -16,6 +16,7 @@
     "@iconify-json/prime": "^1.1.4",
     "@iconify-json/twemoji": "^1.1.10",
     "@nuxt/content": "^2.4.3",
+    "@nuxtjs/svg": "^0.4.0",
     "@pinia/nuxt": "^0.4.6",
     "@sfxcode/nuxt-primevue": "^1.0.0",
     "@unocss/nuxt": "^0.49.4",
@@ -28,6 +29,7 @@
     "pinia": "^2.0.30",
     "sass": "^1.58.0",
     "typescript": "^4.9.5",
+    "vite-svg-loader": "^4.0.0",
     "vitest": "^0.28.4"
   }
 }
