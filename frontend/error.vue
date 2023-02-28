@@ -1,9 +1,6 @@
-<script setup lang="ts">
-const router = useRouter()
-</script>
-
 <template>
   <div class="card">
+
     <div class="col-12 mt-10 text-center">
       <img src="~/assets/Marylin.png" style="width:400px;">
     </div>
@@ -22,5 +19,10 @@ const router = useRouter()
         <Button icon="pi pi-arrow-left" label="Back to home" @click="router.push('/')" />
       </div>
     </div>
+    
   </div>
 </template>
+
+<script setup lang="ts">
+const router = useRouter()
+</script>

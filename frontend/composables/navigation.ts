@@ -9,18 +9,16 @@ export function useNavigationMenu() {
           }],
         },
         {
-          label: 'PrimeVue',
+          label: 'Clients',
           items: [
-            { label: 'DataTable', icon: 'pi pi-fw pi-table', to: '/prime/datatable' },
-            { label: 'Messages', icon: 'pi pi-fw pi-user-edit', to: '/prime/messages' },
-            { label: 'Validation', icon: 'pi pi-fw pi-user-edit', to: '/prime/validation' },
+            { label: 'Clients', icon: 'pi pi-fw pi-id-card', to: '/clients/dashboardClients' },
+            { label: 'Companies', icon: 'pi pi-fw pi-truck', to: '/clients/dashboardCompanies' },
           ],
         },
         {
-          label: 'UI',
+          label: 'Admin',
           items: [
-            { label: 'UnoCSS', icon: 'pi pi-fw pi-user-edit', to: '/ui/uno' },
-            { label: 'Icons', icon: 'pi pi-fw pi-user-edit', to: '/ui/icons' },
+            { label: 'Manage Players', icon: 'pi pi-fw pi-users', to: '/admin/dashboardPlayers' },
           ],
         } 
       ]

@@ -2,6 +2,7 @@
 <template>
     <div class="layout-topbar">
       <NuxtLink to="/" class="layout-topbar-logo">
+        <img src="~/assets/handshake.png" style="width:40px; margin-right: 20px; margin-left: 20px;">
         <span>Handshake CRM</span>
       </NuxtLink>
       <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle">
