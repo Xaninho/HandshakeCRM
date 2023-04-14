@@ -1,5 +1,5 @@
 import { Country } from "./Country";
-import { Representative } from "./Representative";
+import { Agent } from "./Representative";
 
 export class Customer {
     id: number;
@@ -10,7 +10,7 @@ export class Customer {
     status: string;
     verified: boolean;
     activity: number;
-    representative: Representative;
+    representative: Agent;
     balance: number;
 
     constructor() {
@@ -22,7 +22,7 @@ export class Customer {
         this.status = '';
         this.verified = false;
         this.activity = 0;
-        this.representative = new Representative();
+        this.representative = new Agent();
         this.balance = 0;
     }
 }

@@ -1,4 +1,4 @@
-export class Representative {
+export class Agent {
     public name: string;
     public image: string;
 
