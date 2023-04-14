@@ -1,7 +1,7 @@
 export class Country {
     public name: string;
     public code: string;
-    public flagUrl: string;
+    public flagUrl?: string;
 
     constructor() {
         this.name = "";
