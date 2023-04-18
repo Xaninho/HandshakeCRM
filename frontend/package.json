@@ -31,5 +31,8 @@
     "typescript": "^4.9.5",
     "vite-svg-loader": "^4.0.0",
     "vitest": "^0.28.4"
+  },
+  "dependencies": {
+    "chart.js": "^4.2.1"
   }
 }
