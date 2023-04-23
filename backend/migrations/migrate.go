@@ -12,5 +12,12 @@ func init() {
 }
 
 func main() {
-	initializers.DB.AutoMigrate(&models.Company{})
+	initializers.DB.AutoMigrate(
+        &models.Company{},
+        &models.Client{},
+        &models.Country{},
+        &models.Currency{},
+        &models.Agent{},
+        &models.EnumType{},
+    )
 }

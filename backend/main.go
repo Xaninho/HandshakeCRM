@@ -15,11 +15,49 @@ func main() {
 
 	r := gin.Default()
 
+	// Companies
 	r.POST("/company", controllers.CompanyCreate)
 	r.GET("/company", controllers.CompanyIndex)
 	r.GET("/company/:id", controllers.CompanyShow)
 	r.PUT("/company/:id", controllers.CompanyUpdate)
 	r.DELETE("/company/:id", controllers.CompanyDelete)
+
+	// Clients
+	r.POST("/client", controllers.ClientCreate)
+	r.GET("/client", controllers.ClientIndex)
+	r.GET("/client/:id", controllers.ClientShow)
+	r.PUT("/client/:id", controllers.ClientUpdate)
+	r.DELETE("/client/:id", controllers.ClientDelete)
+
+	// Agents
+	r.POST("/agent", controllers.AgentCreate)
+	r.GET("/agent", controllers.AgentIndex)
+	r.GET("/agent/:id", controllers.AgentShow)
+	r.PUT("/agent/:id", controllers.AgentUpdate)
+	r.DELETE("/agent/:id", controllers.AgentDelete)
+
+	// Currencies
+	r.POST("/currency", controllers.CurrencyCreate)
+	r.GET("/currency", controllers.CurrencyIndex)
+	r.GET("/currency/:id", controllers.CurrencyShow)
+	r.PUT("/currency/:id", controllers.CurrencyUpdate)
+	r.DELETE("/currency/:id", controllers.CurrencyDelete)
+
+	// Countries
+	r.POST("/country", controllers.CountryCreate)
+	r.GET("/country", controllers.CountryIndex)
+	r.GET("/country/:id", controllers.CountryShow)
+	r.PUT("/country/:id", controllers.CountryUpdate)
+	r.DELETE("/country/:id", controllers.CountryDelete)
+	
+	// EnumTypes
+	r.POST("/enumType", controllers.EnumTypeCreate)
+	r.GET("/enumType", controllers.EnumTypeIndex)
+	r.GET("/enumType/:id", controllers.EnumTypeShow)
+	r.PUT("/enumType/:id", controllers.EnumTypeUpdate)
+	r.DELETE("/enumType/:id", controllers.EnumTypeDelete)
+
+
 
 	r.Run()
 }
