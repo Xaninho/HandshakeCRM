@@ -2,39 +2,41 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/models"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/models"
 )
 
 type ClientRequest struct {
-	Company  		models.Company `json:"company"`
-	Name       		string `json:"name"`
-	Email      		string `json:"email"`
-	PhotoURL   		string `json:"photoURL"`
-	Function 		models.EnumType `json:"function"`
-	Type     		models.EnumType `json:"type"`
-	PhoneNumber 	int `json:"phoneNumber"`
-	Aniversary 		string `json:"aniversary"`
+	CompanyId       int    `json:"companyId"`
+	Name            string `json:"name"`
+	Email           string `json:"email"`
+	PhotoURL        string `json:"photoURL"`
+	FunctionId      int    `json:"functionId"`
+	TypeId          int    `json:"typeId"`
+	PhoneNumber     int    `json:"phoneNumber"`
+	Aniversary      string `json:"aniversary"`
+	AssignedAgentId int    `json:"assignedAgentId"`
 }
 
-func ClientCreate (c *gin.Context) {
+func ClientCreate(c *gin.Context) {
 
 	// Get data off req body
 	var body ClientRequest
 	c.Bind(&body)
 
 	// Create a post
-	client := models.Client{	
-		Company: body.Company,
-		Name: body.Name,
-		Email: body.Email,
-		PhotoURL: body.PhotoURL,
-		Function: body.Function,
-		Type: body.Type,
-		PhoneNumber: body.PhoneNumber,
-		Aniversary: body.Aniversary,
+	client := models.Client{
+		CompanyId:       body.CompanyId,
+		Name:            body.Name,
+		Email:           body.Email,
+		PhotoURL:        body.PhotoURL,
+		FunctionId:      body.FunctionId,
+		TypeId:          body.TypeId,
+		PhoneNumber:     body.PhoneNumber,
+		Aniversary:      body.Aniversary,
+		AssignedAgentId: body.AssignedAgentId,
 	}
-	
+
 	result := initializers.DB.Create(&client)
 
 	if result.Error != nil {
@@ -46,10 +48,9 @@ func ClientCreate (c *gin.Context) {
 	c.JSON(200, gin.H{
 		"client": client,
 	})
-
 }
 
-func ClientIndex (c *gin.Context) {
+func ClientIndex(c *gin.Context) {
 	//Get the posts
 	var clients []models.Client
 	initializers.DB.Find(&clients)
@@ -60,7 +61,7 @@ func ClientIndex (c *gin.Context) {
 	})
 }
 
-func ClientShow (c *gin.Context) {
+func ClientShow(c *gin.Context) {
 	//get id off url
 	id := c.Param("id")
 
@@ -74,7 +75,7 @@ func ClientShow (c *gin.Context) {
 	})
 }
 
-func ClientUpdate (c *gin.Context) {
+func ClientUpdate(c *gin.Context) {
 	// Get the id off the url
 	id := c.Param("id")
 
@@ -89,28 +90,28 @@ func ClientUpdate (c *gin.Context) {
 
 	// Update it
 	initializers.DB.Model(&client).Updates(models.Client{
-		Company: body.Company,
-		Name: body.Name,
-		Email: body.Email,
-		PhotoURL: body.PhotoURL,
-		Function: body.Function,
-		Type: body.Type,
-		PhoneNumber: body.PhoneNumber,
-		Aniversary: body.Aniversary,
+		CompanyId:       body.CompanyId,
+		Name:            body.Name,
+		Email:           body.Email,
+		PhotoURL:        body.PhotoURL,
+		FunctionId:      body.FunctionId,
+		TypeId:          body.TypeId,
+		PhoneNumber:     body.PhoneNumber,
+		Aniversary:      body.Aniversary,
+		AssignedAgentId: body.AssignedAgentId,
 	})
 
 	// Respond with it
 	c.JSON(200, gin.H{
 		"client": client,
 	})
-
 }
 
-func ClientDelete (c * gin.Context) {
+func ClientDelete(c *gin.Context) {
 
 	// Get the id off the url
-	id := c.Param("id")	
-	
+	id := c.Param("id")
+
 	// Delete the company
 	initializers.DB.Delete(&models.Client{}, id)
 

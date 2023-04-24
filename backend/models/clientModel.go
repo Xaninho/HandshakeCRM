@@ -5,12 +5,13 @@ import "gorm.io/gorm"
 type Client struct {
 	gorm.Model
 
-	Company  		Company
-    Name       		string
-    Email      		string
-    PhotoURL   		string
-    Function 		EnumType
-    Type     		EnumType
-    PhoneNumber 	int
-    Aniversary 		string
+	Name            string
+	Email           string
+	PhotoURL        string
+	PhoneNumber     int
+	Aniversary      string
+	CompanyId       int
+	FunctionId      int
+	TypeId          int
+	AssignedAgentId int
 }

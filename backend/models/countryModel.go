@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Country struct {
 	gorm.Model
 
-	Name        	string
-    Currency  		Currency
-    Continent	 	EnumType
+	Name        string
+	CurrencyId  int
+	ContinentId int
 }

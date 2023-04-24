@@ -2,17 +2,17 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/models"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/models"
 )
 
 type CurrencyRequest struct {
-    Code         	string `json:"code"`
-	Name         	string `json:"name"`
-	ExchangeRate 	float64 `json:"exchangeRate"`
+	Code         string
+	Name         string
+	ExchangeRate float64
 }
 
-func CurrencyCreate (c *gin.Context) {
+func CurrencyCreate(c *gin.Context) {
 
 	// Get data off req body
 	var body CurrencyRequest
@@ -20,12 +20,12 @@ func CurrencyCreate (c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a post
-	currency := models.Currency{	
-		Code: body.Code,
-		Name: body.Name,
+	currency := models.Currency{
+		Code:         body.Code,
+		Name:         body.Name,
 		ExchangeRate: body.ExchangeRate,
 	}
-	
+
 	result := initializers.DB.Create(&currency)
 
 	if result.Error != nil {
@@ -40,7 +40,7 @@ func CurrencyCreate (c *gin.Context) {
 
 }
 
-func CurrencyIndex (c *gin.Context) {
+func CurrencyIndex(c *gin.Context) {
 
 	//Get the posts
 	var currencies []models.Currency
@@ -52,7 +52,7 @@ func CurrencyIndex (c *gin.Context) {
 	})
 }
 
-func CurrencyShow (c *gin.Context) {
+func CurrencyShow(c *gin.Context) {
 
 	//get id off url
 	id := c.Param("id")
@@ -67,7 +67,7 @@ func CurrencyShow (c *gin.Context) {
 	})
 }
 
-func CurrencyUpdate (c *gin.Context) {
+func CurrencyUpdate(c *gin.Context) {
 
 	// Get the id off the url
 	id := c.Param("id")
@@ -83,8 +83,8 @@ func CurrencyUpdate (c *gin.Context) {
 
 	// Update it
 	initializers.DB.Model(&currency).Updates(models.Currency{
-		Code: body.Code,
-		Name: body.Name,
+		Code:         body.Code,
+		Name:         body.Name,
 		ExchangeRate: body.ExchangeRate,
 	})
 
@@ -95,11 +95,11 @@ func CurrencyUpdate (c *gin.Context) {
 
 }
 
-func CurrencyDelete (c * gin.Context) {
+func CurrencyDelete(c *gin.Context) {
 
 	// Get the id off the url
-	id := c.Param("id")	
-	
+	id := c.Param("id")
+
 	// Delete the company
 	initializers.DB.Delete(&models.Currency{}, id)
 

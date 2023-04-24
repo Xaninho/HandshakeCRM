@@ -2,44 +2,43 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/models"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/models"
 )
 
 type CompanyRequest struct {
-	NIF                 	int `json:"nif"`
-	Name                	string `json:"name"`
-	Currency          		models.Currency `json:"currency"`
-	HasElectronicBilling	bool `json:"hasElectronicBilling"`
-	PhotoURL            	string `json:"photoURL"`
-	Country           		models.Country `json:"country"`
-	PostalCode          	string `json:"postalCode"`
-	Address             	string `json:"address"`
-	AssignedAgent     		models.Agent `json:"assignedAgent"`
-	State             		models.EnumType `json:"state"`
-	Notes               	string `json:"notes"`
+	NIF                  int    `json:"nif"`
+	Name                 string `json:"name"`
+	CurrencyId           int    `json:"currencyId"`
+	HasElectronicBilling bool   `json:"hasElectronicBilling"`
+	PhotoURL             string `json:"photoURL"`
+	CountryId            int    `json:"countryId"`
+	PostalCode           string `json:"postalCode"`
+	Address              string `json:"address"`
+	StateId              int    `json:"stateId"`
+	Notes                string `json:"notes"`
 }
 
-func CompanyCreate (c *gin.Context) {
+func CompanyCreate(c *gin.Context) {
 
 	// Get data off req body
 	var body CompanyRequest
 	c.Bind(&body)
 
 	// Create a post
-	company := models.Company{	
-		NIF: body.NIF,
-		Name: body.Name,
-		Currency: body.Currency,
+	company := models.Company{
+		NIF:                  body.NIF,
+		Name:                 body.Name,
+		CurrencyId:           body.CurrencyId,
 		HasElectronicBilling: body.HasElectronicBilling,
-		PhotoURL: body.PhotoURL,
-		Country: body.Country,
-		PostalCode: body.PostalCode,
-		Address: body.Address,
-		State: body.State,
-		Notes: body.Notes,
+		PhotoURL:             body.PhotoURL,
+		CountryId:            body.CountryId,
+		PostalCode:           body.PostalCode,
+		Address:              body.Address,
+		StateId:              body.StateId,
+		Notes:                body.Notes,
 	}
-	
+
 	result := initializers.DB.Create(&company)
 
 	if result.Error != nil {
@@ -54,7 +53,7 @@ func CompanyCreate (c *gin.Context) {
 
 }
 
-func CompanyIndex (c *gin.Context) {
+func CompanyIndex(c *gin.Context) {
 
 	//Get the posts
 	var companies []models.Company
@@ -66,7 +65,7 @@ func CompanyIndex (c *gin.Context) {
 	})
 }
 
-func CompanyShow (c *gin.Context) {
+func CompanyShow(c *gin.Context) {
 
 	//get id off url
 	id := c.Param("id")
@@ -81,7 +80,7 @@ func CompanyShow (c *gin.Context) {
 	})
 }
 
-func CompanyUpdate (c *gin.Context) {
+func CompanyUpdate(c *gin.Context) {
 
 	// Get the id off the url
 	id := c.Param("id")
@@ -97,16 +96,16 @@ func CompanyUpdate (c *gin.Context) {
 	// Update it
 
 	initializers.DB.Model(&company).Updates(models.Company{
-		NIF: body.NIF,
-		Name: body.Name,
-		Currency: body.Currency,
+		NIF:                  body.NIF,
+		Name:                 body.Name,
+		CurrencyId:           body.CurrencyId,
 		HasElectronicBilling: body.HasElectronicBilling,
-		PhotoURL: body.PhotoURL,
-		Country: body.Country,
-		PostalCode: body.PostalCode,
-		Address: body.Address,
-		State: body.State,
-		Notes: body.Notes,
+		PhotoURL:             body.PhotoURL,
+		CountryId:            body.CountryId,
+		PostalCode:           body.PostalCode,
+		Address:              body.Address,
+		StateId:              body.StateId,
+		Notes:                body.Notes,
 	})
 
 	// Respond with it
@@ -116,11 +115,11 @@ func CompanyUpdate (c *gin.Context) {
 
 }
 
-func CompanyDelete (c * gin.Context) {
+func CompanyDelete(c *gin.Context) {
 
 	// Get the id off the url
-	id := c.Param("id")	
-	
+	id := c.Param("id")
+
 	// Delete the company
 	initializers.DB.Delete(&models.Company{}, id)
 

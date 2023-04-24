@@ -2,17 +2,17 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/models"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/models"
 )
 
 type CountryRequest struct {
-    Name      string        `json:"name"`
-    Currency  models.Currency `json:"currency"`
-    Continent models.EnumType `json:"continent"`
+	Name        string `json:"name"`
+	CurrencyId  int    `json:"currencyId"`
+	ContinentId int    `json:"continentId"`
 }
 
-func CountryCreate (c *gin.Context) {
+func CountryCreate(c *gin.Context) {
 
 	// Get data off req body
 	var body CountryRequest
@@ -20,12 +20,12 @@ func CountryCreate (c *gin.Context) {
 	c.Bind(&body)
 
 	// Create a post
-	country := models.Country{	
-		Name: body.Name,
-		Currency: body.Currency,
-		Continent: body.Continent,
+	country := models.Country{
+		Name:        body.Name,
+		CurrencyId:  body.CurrencyId,
+		ContinentId: body.ContinentId,
 	}
-	
+
 	result := initializers.DB.Create(&country)
 
 	if result.Error != nil {
@@ -40,7 +40,7 @@ func CountryCreate (c *gin.Context) {
 
 }
 
-func CountryIndex (c *gin.Context) {
+func CountryIndex(c *gin.Context) {
 	//Get the posts
 	var countries []models.Country
 	initializers.DB.Find(&countries)
@@ -51,7 +51,7 @@ func CountryIndex (c *gin.Context) {
 	})
 }
 
-func CountryShow (c *gin.Context) {
+func CountryShow(c *gin.Context) {
 	//get id off url
 	id := c.Param("id")
 
@@ -65,7 +65,7 @@ func CountryShow (c *gin.Context) {
 	})
 }
 
-func CountryUpdate (c *gin.Context) {
+func CountryUpdate(c *gin.Context) {
 	// Get the id off the url
 	id := c.Param("id")
 
@@ -80,8 +80,8 @@ func CountryUpdate (c *gin.Context) {
 	// Update it
 	initializers.DB.Model(&country).Updates(models.Country{
 		Name:        body.Name,
-		Currency:    body.Currency,
-		Continent:   body.Continent,
+		CurrencyId:  body.CurrencyId,
+		ContinentId: body.ContinentId,
 	})
 
 	// Respond with it
@@ -91,11 +91,11 @@ func CountryUpdate (c *gin.Context) {
 
 }
 
-func CountryDelete (c * gin.Context) {
+func CountryDelete(c *gin.Context) {
 
 	// Get the id off the url
-	id := c.Param("id")	
-	
+	id := c.Param("id")
+
 	// Delete the company
 	initializers.DB.Delete(&models.Country{}, id)
 

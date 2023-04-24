@@ -5,9 +5,9 @@ import "gorm.io/gorm"
 type Agent struct {
 	gorm.Model
 
-	Name        	string
-    Email       	string
-    Position  	    EnumType
-    PhoneNumber 	int
-    PhotoURL    	string
+	Name        string
+	Email       string
+	PositionId  int
+	PhoneNumber int
+	PhotoURL    string
 }

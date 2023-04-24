@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/initializers"
 	"github.com/handshakeCRM/controllers"
+	"github.com/handshakeCRM/initializers"
 )
 
 func init() {
-	initializers.LoadEnvVariables();
+	initializers.LoadEnvVariables()
 	initializers.ConnectToDb()
 }
 
@@ -49,15 +49,13 @@ func main() {
 	r.GET("/country/:id", controllers.CountryShow)
 	r.PUT("/country/:id", controllers.CountryUpdate)
 	r.DELETE("/country/:id", controllers.CountryDelete)
-	
+
 	// EnumTypes
 	r.POST("/enumType", controllers.EnumTypeCreate)
 	r.GET("/enumType", controllers.EnumTypeIndex)
 	r.GET("/enumType/:id", controllers.EnumTypeShow)
 	r.PUT("/enumType/:id", controllers.EnumTypeUpdate)
 	r.DELETE("/enumType/:id", controllers.EnumTypeDelete)
-
-
 
 	r.Run()
 }

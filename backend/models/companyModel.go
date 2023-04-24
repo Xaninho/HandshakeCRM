@@ -5,14 +5,14 @@ import "gorm.io/gorm"
 type Company struct {
 	gorm.Model
 
-	NIF                 	int
-    Name                	string
-    Currency          	    Currency
-    HasElectronicBilling	bool
-    PhotoURL            	string
-    Country           	    Country
-    PostalCode          	string
-    Address             	string
-    State             	    EnumType
-    Notes               	string
+	NIF                  int
+	Name                 string
+	CountryId            int
+	StateId              int
+	CurrencyId           int
+	HasElectronicBilling bool
+	PhotoURL             string
+	PostalCode           string
+	Address              string
+	Notes                string
 }
