@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/handshakeCRM/controllers"
 	"github.com/handshakeCRM/initializers"
@@ -14,6 +15,11 @@ func init() {
 func main() {
 
 	r := gin.Default()
+
+	// Set up CORS middleware
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:4500"} // Set your desired origins here
+	r.Use(cors.New(config))
 
 	// Companies
 	r.POST("/company", controllers.CompanyCreate)
