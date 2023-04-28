@@ -14,4 +14,8 @@ type Client struct {
 	FunctionId      int
 	TypeId          int
 	AssignedAgentId int
+
+	AssignedAgent Agent    `gorm:"foreignKey:AssignedAgentId"`
+	Company       Company  `gorm:"foreignKey:CompanyId"`
+	Type          EnumType `gorm:"foreignKey:TypeId"`
 }

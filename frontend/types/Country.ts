@@ -1,11 +1,11 @@
 export class Country {
-    public name: string;
-    public code: string;
-    public flagUrl?: string;
+    public Name: string;
+    public Code: string;
+    public FlagUrl?: string;
 
     constructor() {
-        this.name = "";
-        this.code = "";
-        this.flagUrl = "";
+        this.Name = "";
+        this.Code = "";
+        this.FlagUrl = "";
     } 
 }

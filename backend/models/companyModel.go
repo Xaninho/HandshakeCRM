@@ -15,4 +15,7 @@ type Company struct {
 	PostalCode           string
 	Address              string
 	Notes                string
+
+	Currency Currency `gorm:"foreignKey:CurrencyId"`
+	Country  Country  `gorm:"foreignKey:CountryId"`
 }

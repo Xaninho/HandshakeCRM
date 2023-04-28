@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/handshakeCRM/initializers"
 	"github.com/handshakeCRM/models"
+	"gorm.io/gorm"
 )
 
 type ClientRequest struct {
@@ -51,9 +52,15 @@ func ClientCreate(c *gin.Context) {
 }
 
 func ClientIndex(c *gin.Context) {
+
 	//Get the posts
 	var clients []models.Client
-	initializers.DB.Find(&clients)
+
+	initializers.DB.Preload("AssignedAgent", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, name, photo_url")
+	}).Preload("Company").Preload("Company.Currency").Preload("Company.Country").Preload("Type", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, type, description")
+	}).Find(&clients)
 
 	//Respond with them
 	c.JSON(200, gin.H{

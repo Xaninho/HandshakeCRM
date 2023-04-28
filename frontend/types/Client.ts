@@ -1,24 +1,26 @@
-import { Country } from "./Country";
+export default class Client {
 
-export class Client {
-
-    public id : number;
-    public firstName: string;
-    public lastName: string;
-    public displayName: string;
-    public note?: string;
-    public photoUrl?: string;
-    public country: Country;
-    public company: string;
-    public rating?: number;
+    public ID : number;
+    public Name: string;
+    public Email: string;
+    public PhotoURL: string;
+    public PhoneNumber: string;
+    public Aniversary: string;
+    public CompanyId: number;
+    public FunctionId: number;
+    public TypeId: number;
+    public AssignedAgentId?: number;
 
     constructor() {
-        this.id = -1;
-        this.firstName = "";
-        this.lastName = "";
-        this.displayName = this.firstName + " " + this.lastName;
-        this.company = "";
-        this.rating = 0;
-        this.country = new Country();
+        this.ID = -1;
+        this.Name = '';
+        this.Email = '';
+        this.PhotoURL = '';
+        this.PhoneNumber = '';
+        this.Aniversary = '';
+        this.CompanyId = 0
+        this.FunctionId = 0;
+        this.TypeId = 0;
+        this.AssignedAgentId = 0;
     }
 }

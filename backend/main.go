@@ -59,7 +59,7 @@ func main() {
 	// EnumTypes
 	r.POST("/enumType", controllers.EnumTypeCreate)
 	r.GET("/enumType", controllers.EnumTypeIndex)
-	r.GET("/enumType/:id", controllers.EnumTypeShow)
+	r.GET("/enumType/:typeOfEnum", controllers.EnumTypeShow)
 	r.PUT("/enumType/:id", controllers.EnumTypeUpdate)
 	r.DELETE("/enumType/:id", controllers.EnumTypeDelete)
 

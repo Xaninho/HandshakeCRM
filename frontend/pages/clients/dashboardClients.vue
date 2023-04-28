@@ -5,7 +5,7 @@
         <Toolbar class="mb-4">
             <template #start>
                 <Button label="New" icon="pi pi-plus" severity="success" class="mr-2" @click="openUpsertCustomerDialog" />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" class="mr-2"  @click="confirmDeleteSelected" :disabled="!selectedCustomers || !selectedCustomers.length"/>
+                <Button label="Delete" icon="pi pi-trash" severity="danger" class="mr-2"  @click="confirmDeleteSelected" :disabled="!selectedClients || !selectedClients.length"/>
                 <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV()"  />
             </template>
 
@@ -21,15 +21,15 @@
         
         <DataTable
             v-model:filters="filters"
-            :value="customers"
+            :value="clients"
             paginator
             :rows="10"
-            dataKey="id"
+            dataKey="ID"
             filterDisplay="row"
             :loading="loading"
-            :globalFilterFields="['name', 'country.name', 'representative.name', 'status']"
+            :globalFilterFields="['name', 'country.name', 'representative.name']"
             ref="dataTableCustomers"
-            v-model:selection="selectedCustomers"
+            v-model:selection="selectedClients"
             :class="`p-datatable-sm`"
         >
             <!-- Loaders -->
@@ -45,63 +45,43 @@
                 </template>
             </Column>
             <!---->
-            <Column header="Name" field="name" style="min-width: 12rem">
-                <template #body="{ data }"> {{ data.name }} </template>
+            <Column header="Name" field="Name" style="min-width: 12rem">
+                <template #body="{ data }"> {{ data.Name }} </template>
                 <template #filter="{ filterModel, filterCallback }">
                     <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by name" />
                 </template>
             </Column>
             <!---->
-            <Column header="Country" filterField="country.name" style="min-width: 12rem">
-                <template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
-                        <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.country.code}`" style="width: 24px" />
-                        <span>{{ data.country.name }}</span>
-                    </div>
-                </template>
+            <Column header="Company" field="Company" style="min-width: 12rem">
+                <template #body="{ data }"> {{ data.Company.Name }} </template>
                 <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by country" />
+                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by name" />
                 </template>
             </Column>
             <!---->
-            <Column header="Agent" filterField="representative" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+            <Column header="Currency" field="Currency" style="min-width: 12rem">
+                <template #body="{ data }"> {{ data.Company.Currency.Name }} </template>
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by name" />
+                </template>
+            </Column>
+            <!---->
+            <Column header="Assigned Agent" filterField="Agent" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
                 <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
-                        <img :alt="data.representative.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`" style="width: 32px" />
-                        <span>{{ data.representative.name }}</span>
+                        <img :alt="data.assignedAgentId" :src="data.AssignedAgent.PhotoUrl" style="width: 32px" />
+                        <span>{{ data.AssignedAgent.Name }}</span>
                     </div>
                 </template>
                 <template #filter="{ filterModel, filterCallback }">
-                    <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="representatives" optionLabel="name" placeholder="Any" class="p-column-filter" style="min-width: 14rem" :maxSelectedLabels="1">
+                    <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="agents" optionLabel="name" placeholder="Any" class="p-column-filter" style="min-width: 14rem" :maxSelectedLabels="1">
                         <template #option="slotProps">
                             <div class="flex align-items-center gap-2">
-                                <img :alt="slotProps.option.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.option.image}`" style="width: 32px" />
+                                <img :alt="slotProps.option.name" :src="`https://www.meme-arsenal.com/memes/328188a0502635c0b61a76d65dbd51d5.jpg`" style="width: 32px" />
                                 <span>{{ slotProps.option.name }}</span>
                             </div>
                         </template>
                     </MultiSelect>
-                </template>
-            </Column>
-            <!---->
-            <Column field="status" header="Status" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                <template #body="{ data }">
-                    <Tag :value="data.status" :severity="getSeverity(data.status)" />
-                </template>
-                <template #filter="{ filterModel, filterCallback }">
-                    <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One" class="p-column-filter" style="min-width: 12rem" :showClear="true">
-                        <template #option="slotProps">
-                            <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
-                        </template>
-                    </Dropdown>
-                </template>
-            </Column>
-            <!---->
-            <Column field="verified" header="Verified" dataType="boolean" style="min-width: 6rem">
-                <template #body="{ data }">
-                    <i class="pi" :class="{ 'pi-check-circle text-green-500': data.verified, 'pi-times-circle text-red-400': !data.verified }"></i>
-                </template>
-                <template #filter="{ filterModel, filterCallback }">
-                    <TriStateCheckbox v-model="filterModel.value" @change="filterCallback()" />
                 </template>
             </Column>
 
@@ -120,45 +100,71 @@
         <!-- Name -->
         <div class="field">
             <label for="name">Name</label>
-            <InputText id="name" v-model.trim="editedCustomer.name" required="true" autofocus :class="{'p-invalid': submitted && !editedCustomer.name}" />
-            <small class="p-error" v-if="submitted && !editedCustomer.name">Name is required.</small>
+            <InputText id="name" v-model.trim="editedClient.Name" required="true" autofocus :class="{'p-invalid': submitted && !editedClient.Name}" />
+            <small class="p-error" v-if="submitted && !editedClient.Name">Name is required.</small>
         </div>
-        <!-- Company -->
+
+        <!-- Email -->
         <div class="field">
-            <label for="company">Company</label>
-            <Textarea id="company" v-model="editedCustomer.company" required="true" rows="3" cols="20" />
+        <label for="email">Email</label>
+        <InputText
+            id="email"
+            v-model.trim="editedClient.Email"
+           
+        />
+        <small class="p-error" v-if="submitted">
+            Please enter a valid email address.
+        </small>
         </div>
-        <!-- Status -->
+
+        <!-- PhoneNumber -->
         <div class="field">
-            <label for="status" class="mb-3">Client Status</label>
-            <Dropdown id="status" v-model="editedCustomer.status" :options="statuses" optionLabel="label" placeholder="Select a Status">
-                <template #value="slotProps">
-                    <div v-if="slotProps.value && slotProps.value.value">
-                        <Tag :value="slotProps.value.value" :severity="getSeverity(slotProps.value.label)" />
-                    </div>
-                    <div v-else-if="slotProps.value && !slotProps.value.value">
-                        <Tag :value="slotProps.value" :severity="getSeverity(slotProps.value)" />
-                    </div>
-                    <span v-else>
-                        {{slotProps.placeholder}}
-                    </span>
-                </template>
-            </Dropdown>
+        <label for="phone-number">Phone Number</label>
+        <InputText
+            id="phone-number"
+            v-model.trim="editedClient.PhoneNumber"
+            :class="{ 'p-invalid': submitted }"
+        />
+        <small
+            class="p-error"
+            v-if="submitted"
+        >
+            Please enter a valid phone number.
+        </small>
         </div>
-        <!-- Balance -->
-        <div class="formgrid grid">
-            <div class="field col">
-                <label for="balance">Balance</label>
-                <InputNumber id="price" v-model="editedCustomer.balance" mode="currency" currency="EUR" locale="pt-PT" />
-            </div>
+
+        <!-- Aniversary -->
+        <div class="field">
+        <label for="aniversary">Aniversary</label>
+        <Calendar
+            id="aniversary"
+            v-model="editedClient.Aniversary"
+            :showIcon="true"
+            :dateFormat="'mm/dd/yy'"
+        />
         </div>
-        <!-- Activity -->
-        <div class="formgrid grid">
-            <div class="field col">
-                <label for="activity">Activity</label>
-                <InputNumber id="activity" v-model="editedCustomer.activity" />
-            </div>
+
+         <!-- Company -->
+        <div class="field">
+        <label for="company">Company</label>
+        <Dropdown
+            id="company"
+            :options="companies"
+            v-model="editedClient.CompanyId"
+            optionLabel="Name"
+            :class="{ 'p-invalid': submitted && !editedClient.CompanyId }"
+            placeholder="Select a company"
+        />
+        <small
+            class="p-error"
+            v-if="submitted && !editedClient.CompanyId"
+        >
+            Company is required.
+        </small>
         </div>
+
+        
+
 
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="closeUpsertCustomerDialog"/>
@@ -170,7 +176,7 @@
     <Dialog v-model:visible="deleteCustomerDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
         <div class="confirmation-content">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span v-if="editedCustomer">Are you sure you want to delete <b>{{editedCustomer.name}}</b>?</span>
+            <span v-if="editedClient">Are you sure you want to delete <b>{{editedClient.Name}}</b>?</span>
         </div>
         <template #footer>
             <Button label="No" icon="pi pi-times" text @click="deleteCustomerDialog = false"/>
@@ -179,14 +185,14 @@
     </Dialog>
 
     <!-- Delete Various Customers Dialog -->
-    <Dialog v-model:visible="deleteSelectedCustomersDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+    <Dialog v-model:visible="deleteselectedClientsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
         <div class="confirmation-content">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span v-if="editedCustomer">Are you sure you want to delete the selected products?</span>
+            <span v-if="editedClient">Are you sure you want to delete the selected products?</span>
         </div>
         <template #footer>
-            <Button label="No" icon="pi pi-times" text @click="deleteSelectedCustomersDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedCustomers" />
+            <Button label="No" icon="pi pi-times" text @click="deleteselectedClientsDialog = false"/>
+            <Button label="Yes" icon="pi pi-check" text @click="deleteselectedClients" />
         </template>
     </Dialog>
 
@@ -194,52 +200,38 @@
 
 <script lang="ts">
 import { FilterMatchMode } from 'primevue/api';
-import { CustomerService } from '@/service/CustomerService';
-import { Customer } from '~~/types/Customer';
-import { Agent } from '~~/types/Representative';
+import Client from '~~/types/Client';
+import Agent from '~~/types/Agent';
+import crmAPI from '@/service/crmAPI';
+import Company from '~~/types/Company';
+import { EnumType } from 'typescript';
 
 export default {
+    name: 'DashboardClients',
     data() {
         return {
-            editedCustomer: new Customer(),
-            customers: new Array<Customer>(),
-            selectedCustomers: new Array<Customer>(),
+            editedClient: new Client(),
+            clients: new Array<Client>(),
+            selectedClients: new Array<Client>(),
             loading: true as boolean,
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-                'country.name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-                representative: { value: null, matchMode: FilterMatchMode.IN },
-                status: { value: null, matchMode: FilterMatchMode.EQUALS },
-                verified: { value: null, matchMode: FilterMatchMode.EQUALS }
+                Name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+                Company: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+                Currency: { value: null, matchMode: FilterMatchMode.IN },
+                Agent: { value: null, matchMode: FilterMatchMode.IN }
             },
-            representatives: [
-                { name: 'Amy Elsner', image: 'amyelsner.png' },
-                { name: 'Anna Fali', image: 'annafali.png' },
-                { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-                { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-                { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-                { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-                { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-                { name: 'Onyama Limba', image: 'onyamalimba.png' },
-                { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-                { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-            ] as Array<Agent>,
+            agents : new Array<Agent>(),
+            companies : new Array<Company>(),
+            clientPositions : new Array<EnumType>(),
             statuses: ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'] as Array<string>,
             submitted: false as boolean,
             upsertCustomerDialog: false as boolean,
             deleteCustomerDialog: false as boolean,
-            deleteSelectedCustomersDialog: false as boolean,
+            deleteselectedClientsDialog: false as boolean,
         };
     },
     methods: {
-        getCustomers(data : any) {
-            return [...(data || [])].map((d) => {
-                d.date = new Date(d.date);
-
-                return d;
-            });
-        },
         formatDate(value : any) {
             return value.toLocaleDateString('en-US', {
                 day: '2-digit',
@@ -269,7 +261,7 @@ export default {
             (this.$refs.dataTableCustomers as any).exportCSV();
         },
         openUpsertCustomerDialog() : void {
-            this.editedCustomer = new Customer();
+            this.editedClient = new Client();
             this.submitted = false;
             this.upsertCustomerDialog = true;
         },
@@ -280,50 +272,50 @@ export default {
         saveCustomer() : void {
             this.submitted = true;
 
-			if (this.editedCustomer.name.trim()) {
-                if (this.editedCustomer.id) {
-                    this.customers[this.findIndexById(this.editedCustomer.id)] = this.editedCustomer;
+			if (this.editedClient.Name.trim()) {
+                if (this.editedClient.ID) {
+                    this.clients[this.findIndexById(this.editedClient.ID)] = this.editedClient;
                     this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
                 }
                 else {
-                    this.editedCustomer.id = this.createId();
-                    this.customers.push(this.editedCustomer);
+                    this.editedClient.ID = this.createId();
+                    this.clients.push(this.editedClient);
                     this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
                 }
 
                 this.upsertCustomerDialog = false;
-                this.editedCustomer = new Customer();
+                this.editedClient = new Client();
             }
         },
-        editCustomer(_customer : Customer) : void {
-            Object.assign(this.editedCustomer, _customer);
+        editCustomer(_customer : Client) : void {
+            Object.assign(this.editedClient, _customer);
             this.upsertCustomerDialog = true;
         },
-        confirmDeleteCustomer(_customer : Customer) : void {
-            Object.assign(this.editedCustomer, _customer);
+        confirmDeleteCustomer(_customer : Client) : void {
+            Object.assign(this.editedClient, _customer);
             this.deleteCustomerDialog = true;
         },
         deleteCustomer() : void {
-            this.customers = this.customers.filter(val => val.id !== this.editedCustomer.id);
+            this.clients = this.clients.filter(val => val.id !== this.editedClient.ID);
             this.deleteCustomerDialog = false;
-            this.editedCustomer = new Customer();
+            this.editedClient = new Client();
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
         },
         confirmDeleteSelected() : void {
             this.deleteCustomerDialog = true;
         },
-        deleteSelectedCustomers() : void {
-            this.customers = this.customers.filter(val => !this.selectedCustomers.includes(val));
+        deleteselectedClients() : void {
+            this.clients = this.clients.filter(val => !this.selectedClients.includes(val));
             this.deleteCustomerDialog = false;
-            this.selectedCustomers = new Array<Customer>();
+            this.selectedClients = new Array<Client>();
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Customers Deleted', life: 3000});
         },
 
 
         findIndexById(id : number) : number {
             let index = -1;
-            for (let i = 0; i < this.customers.length; i++) {
-                if (this.customers[i].id === id) {
+            for (let i = 0; i < this.clients.length; i++) {
+                if (this.clients[i].ID === id) {
                     index = i;
                     break;
                 }
@@ -335,23 +327,64 @@ export default {
             // generate a and return a random int number
             let id = Math.floor(Math.random() * 10000);
             // check if the id already exists
-            for (let i = 0; i < this.customers.length; i++) {
-                let customer = this.customers[i];
-                if (customer.id === id) {
+            for (let i = 0; i < this.clients.length; i++) {
+                let client = this.clients[i];
+                if (client.ID === id) {
                     id = this.createId();
                     break;
                 }
             }
             return id;
         },
+
+        // #region API Calls
+
+        getClients() : void {
+            crmAPI.getClients()
+                .then((response : any) => {
+                    this.clients = response.data.clients;
+                    this.loading = false;
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+        },
+        getAgents() : void {
+            crmAPI.getAgents()
+                .then((response : any) => {
+                    this.agents = response.data.agents;
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+        },
+        getCompanies() : void {
+            crmAPI.getCompanies()
+                .then((response : any) => {
+                    this.companies = response.data.companies;
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+        },
+        getClientPositions() : void {
+            crmAPI.getEnumTypes("Position")
+                .then((response : any) => {
+                   this.clientPositions = response.data.enumTypes;
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+        },
+
+        // #endregion
     },
 
     /* Lifecycle Methods */
     mounted() {
-        CustomerService.getCustomersMedium().then((data) => {
-            this.customers = this.getCustomers(data);
-            this.loading = false;
-        });
+        this.getClients();
+        this.getAgents();
+        this.getClientPositions();
     }, 
 };
 </script>
