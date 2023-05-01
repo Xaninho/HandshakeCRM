@@ -60,7 +60,7 @@ func ClientIndex(c *gin.Context) {
 		return db.Select("id, name, photo_url")
 	}).Preload("Company").Preload("Company.Currency").Preload("Company.Country").Preload("Type", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, type, description")
-	}).Find(&clients)
+	}).Preload("AssignedAgent").Preload("Type").Preload("Position").Find(&clients)
 
 	//Respond with them
 	c.JSON(200, gin.H{

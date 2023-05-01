@@ -1,3 +1,7 @@
+import Agent from "./Agent";
+import Company from "./Company";
+import EnumType from "./EnumType";
+
 export default class Client {
 
     public ID : number;
@@ -11,6 +15,11 @@ export default class Client {
     public TypeId: number;
     public AssignedAgentId?: number;
 
+    public Company : Company;
+    public AssignedAgent : Agent;
+    public Type : EnumType;
+    public Position : EnumType;
+
     constructor() {
         this.ID = -1;
         this.Name = '';
@@ -22,5 +31,9 @@ export default class Client {
         this.FunctionId = 0;
         this.TypeId = 0;
         this.AssignedAgentId = 0;
+        this.Company = new Company();
+        this.AssignedAgent = new Agent();
+        this.Type = new EnumType();
+        this.Position = new EnumType();
     }
 }

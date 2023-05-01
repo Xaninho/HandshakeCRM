@@ -144,26 +144,77 @@
         />
         </div>
 
-         <!-- Company -->
+        <!-- Company -->
         <div class="field">
         <label for="company">Company</label>
         <Dropdown
-            id="company"
+            v-model="selectedClientCompany"
             :options="companies"
-            v-model="editedClient.CompanyId"
+            :item-value="'ID'"
             optionLabel="Name"
-            :class="{ 'p-invalid': submitted && !editedClient.CompanyId }"
             placeholder="Select a company"
         />
         <small
-            class="p-error"
-            v-if="submitted && !editedClient.CompanyId"
+           v-if="submitted && !editedClient.CompanyId"
+           class="p-error"
         >
             Company is required.
         </small>
         </div>
 
-        
+        <!-- Assigned Agent -->
+        <div class="field">
+        <label for="company">Agent</label>
+        <Dropdown
+            v-model="selectedAssignedAgent"
+            :options="agents"
+            :item-value="'ID'"
+            optionLabel="Name"
+            placeholder="Select an Agent to assign"
+        />
+        <small
+           v-if="submitted && !editedClient.AssignedAgentId"
+           class="p-error"
+        >
+            Assigned Agent is required.
+        </small>
+        </div>
+
+        <!-- Client Type -->
+        <div class="field">
+        <label for="company">Type</label>
+        <Dropdown
+            v-model="selectedClientType"
+            :options="clientTypes"
+            :item-value="'ID'"
+            optionLabel="Description"
+            placeholder="Select the Type of the Client"
+        />
+        <small
+           v-if="submitted && !editedClient.TypeId"
+           class="p-error"
+        >
+            Client Type is required.
+        </small>
+        </div>
+
+        <!-- Client Position -->
+        <div class="field">
+        <label for="company">Position</label>
+        <Dropdown
+            v-model="selectedClientPosition"
+            :options="clientPositions"
+            :item-value="'ID'"
+            optionLabel="Description"
+            placeholder="Select the Position of the Client"
+        />
+        <small
+           v-if="submitted && !editedClient.FunctionId"
+           class="p-error"
+        >
+            Client Position is required.
+        </small>
+        </div>
 
 
         <template #footer>
@@ -204,7 +255,7 @@ import Client from '~~/types/Client';
 import Agent from '~~/types/Agent';
 import crmAPI from '@/service/crmAPI';
 import Company from '~~/types/Company';
-import { EnumType } from 'typescript';
+import EnumType from '~~/types/EnumType';
 
 export default {
     name: 'DashboardClients',
@@ -224,6 +275,7 @@ export default {
             agents : new Array<Agent>(),
             companies : new Array<Company>(),
             clientPositions : new Array<EnumType>(),
+            clientTypes: new Array<EnumType>(),
             statuses: ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'] as Array<string>,
             submitted: false as boolean,
             upsertCustomerDialog: false as boolean,
@@ -232,31 +284,6 @@ export default {
         };
     },
     methods: {
-        formatDate(value : any) {
-            return value.toLocaleDateString('en-US', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        },
-        formatCurrency(value : any) {
-            return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-        },
-        getSeverity(status : string) {
-            switch (status) {
-                case 'unqualified':
-                    return 'danger';
-
-                case 'qualified':
-                    return 'success';
-
-                case 'new':
-                    return 'info';
-
-                case 'negotiation':
-                    return 'warning';
-            }
-        },
         exportCSV() : void {
             (this.$refs.dataTableCustomers as any).exportCSV();
         },
@@ -282,7 +309,6 @@ export default {
                     this.clients.push(this.editedClient);
                     this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
                 }
-
                 this.upsertCustomerDialog = false;
                 this.editedClient = new Client();
             }
@@ -296,7 +322,7 @@ export default {
             this.deleteCustomerDialog = true;
         },
         deleteCustomer() : void {
-            this.clients = this.clients.filter(val => val.id !== this.editedClient.ID);
+            this.clients = this.clients.filter(val => val.ID !== this.editedClient.ID);
             this.deleteCustomerDialog = false;
             this.editedClient = new Client();
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
@@ -310,8 +336,6 @@ export default {
             this.selectedClients = new Array<Client>();
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Customers Deleted', life: 3000});
         },
-
-
         findIndexById(id : number) : number {
             let index = -1;
             for (let i = 0; i < this.clients.length; i++) {
@@ -322,7 +346,6 @@ export default {
             }
             return index;
         },
-
         createId() : number {
             // generate a and return a random int number
             let id = Math.floor(Math.random() * 10000);
@@ -339,7 +362,7 @@ export default {
 
         // #region API Calls
 
-        getClients() : void {
+        loadClients() : void {
             crmAPI.getClients()
                 .then((response : any) => {
                     this.clients = response.data.clients;
@@ -349,7 +372,7 @@ export default {
                     console.log(error);
                 });
         },
-        getAgents() : void {
+        loadAgents() : void {
             crmAPI.getAgents()
                 .then((response : any) => {
                     this.agents = response.data.agents;
@@ -358,7 +381,7 @@ export default {
                     console.log(error);
                 });
         },
-        getCompanies() : void {
+        loadCompanies() : void {
             crmAPI.getCompanies()
                 .then((response : any) => {
                     this.companies = response.data.companies;
@@ -367,7 +390,7 @@ export default {
                     console.log(error);
                 });
         },
-        getClientPositions() : void {
+        loadClientPositions() : void {
             crmAPI.getEnumTypes("Position")
                 .then((response : any) => {
                    this.clientPositions = response.data.enumTypes;
@@ -376,15 +399,83 @@ export default {
                     console.log(error);
                 });
         },
+        loadClientTypes() : void {
+            crmAPI.getEnumTypes("ClientType")
+                .then((response : any) => {
+                    this.clientTypes = response.data.enumTypes;
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+        },
 
         // #endregion
     },
+    computed: {
+        selectedClientCompany: {
+            get() {
+                if (this.editedClient) {
+                    return this.companies.find(company => company.ID === this.editedClient.CompanyId);
+                } else {
+                    return null;
+                }
+            },
+            set(value : any) {
+                this.editedClient.CompanyId = value.ID;
+                this.editedClient.Company = value;
+            }
+        },
+        selectedAssignedAgent: {
+            get() {
+                if (this.editedClient) {
+                    return this.agents.find(agent => agent.ID === this.editedClient.AssignedAgentId);
+                } else {
+                    return null;
+                }
+            },
+            set(value: any) {
+                this.editedClient.AssignedAgentId = value.ID;
+                this.editedClient.AssignedAgent = value;
+            }
+        },
+        selectedClientType: {
+            get() {
+                if (this.editedClient) {
+                    return this.clientTypes.find(clientType => clientType.ID === this.editedClient.TypeId);
+                } else {
+                    return null;
+                }
+            },
+            set(value: any) {
+                this.editedClient.TypeId = value.ID;
+                this.editedClient.Type = value;
+            }
+        },
+        selectedClientPosition: {
+            get() {
+                if (this.editedClient) {
+                    return this.clientPositions.find(clientPosition => clientPosition.ID === this.editedClient.FunctionId);
+                } else {
+                    return null;
+                }
+            },
+            set(value: any) {
+                this.editedClient.FunctionId = value.ID;
+                this.editedClient.Position = value;
+            }
+        }
+    },
+
 
     /* Lifecycle Methods */
     mounted() {
-        this.getClients();
-        this.getAgents();
-        this.getClientPositions();
-    }, 
+        this.loadClients();
+        this.loadCompanies();
+        this.loadAgents();
+        
+        this.loadClientTypes();
+        this.loadClientPositions();
+    },
+
 };
 </script>

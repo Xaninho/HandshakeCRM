@@ -57,7 +57,7 @@ func CompanyIndex(c *gin.Context) {
 
 	//Get the posts
 	var companies []models.Company
-	initializers.DB.Find(&companies)
+	initializers.DB.Preload("Currency").Find(&companies)
 
 	//Respond with them
 	c.JSON(200, gin.H{
