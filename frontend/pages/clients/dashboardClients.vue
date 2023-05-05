@@ -402,6 +402,7 @@ export default {
         // #region API Calls
 
         loadClients() : void {
+            this.loading = true;
             crmAPI.getClients()
                 .then((response : any) => {
                     this.clients = response.data.clients;

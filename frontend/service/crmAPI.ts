@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Client from '~~/types/Client';
+import Company from '~~/types/Company';
 
 // Define the base URL for the CRM API
 const API_BASE_URL = 'http://localhost:3000/';
@@ -56,6 +57,9 @@ export default {
     createClient(_client : Client) {
         return apiInstance.post('/client', _client);
     },
+    createCompany(_company : Company) {
+        return apiInstance.post('/company', _company);
+    },
 
     // #endregion
     // ----------
@@ -65,6 +69,9 @@ export default {
     updateClient(_client : Client) {
         return apiInstance.put('/client/' + _client.ID, _client);
     },
+    updateCompany(_company : Company) {
+        return apiInstance.put('/company/' + _company.ID, _company);
+    },
 
     // #endregion
     // ----------
@@ -73,6 +80,9 @@ export default {
 
     deleteClient(id: number) {
         return apiInstance.delete(`/client/${id}`);
+    },
+    deleteCompany(id: number) {
+        return apiInstance.delete(`/company/${id}`);
     },
 
     // #endregion

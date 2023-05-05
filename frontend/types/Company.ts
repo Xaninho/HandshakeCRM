@@ -1,3 +1,7 @@
+import Country from "./Country";
+import Currency from "./Currency";
+import EnumType from "./EnumType";
+
 export default class Company {
     public ID : number;
     public Name: string;
@@ -10,6 +14,10 @@ export default class Company {
     public Address: string;
     public Notes: string;
 
+    public Country : Country;
+    public Currency : Currency;
+    public State : EnumType;
+
     constructor() {
         this.ID = -1;
         this.Name = '';
@@ -21,7 +29,10 @@ export default class Company {
         this.PostalCode = '';
         this.Address = '';
         this.Notes = '';
-    }
 
+        this.Country = new Country();
+        this.Currency = new Currency();
+        this.State = new EnumType();
+    }
     
 }
