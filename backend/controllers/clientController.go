@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/handshakeCRM/initializers"
 	"github.com/handshakeCRM/models"
@@ -23,7 +26,14 @@ func ClientCreate(c *gin.Context) {
 
 	// Get data off req body
 	var body ClientRequest
-	c.Bind(&body)
+	if err := c.Bind(&body); err != nil {
+		fmt.Println("Error parsing request body:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+	fmt.Println("Request body:", body)
 
 	// Create a post
 	client := models.Client{
@@ -41,14 +51,18 @@ func ClientCreate(c *gin.Context) {
 	result := initializers.DB.Create(&client)
 
 	if result.Error != nil {
-		c.Status(400)
+		fmt.Println("Error creating client:", result.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to create client",
+		})
 		return
 	}
 
 	// Return it
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"client": client,
 	})
+
 }
 
 func ClientIndex(c *gin.Context) {
@@ -123,5 +137,5 @@ func ClientDelete(c *gin.Context) {
 	initializers.DB.Delete(&models.Client{}, id)
 
 	// Respond
-	c.Status(200)
+	c.Status(http.StatusNoContent)
 }

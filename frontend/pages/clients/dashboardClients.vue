@@ -4,8 +4,8 @@
 
         <Toolbar class="mb-4">
             <template #start>
-                <Button label="New" icon="pi pi-plus" severity="success" class="mr-2" @click="openUpsertCustomerDialog" />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" class="mr-2"  @click="confirmDeleteSelected" :disabled="!selectedClients || !selectedClients.length"/>
+                <Button label="New" icon="pi pi-plus" severity="success" class="mr-2" @click="openupsertClientDialog" />
+                <Button label="Delete" icon="pi pi-trash" severity="danger" class="mr-2"  @click="confirmDeleteSelectedClients" :disabled="!selectedClients || !selectedClients.length"/>
                 <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV()"  />
             </template>
 
@@ -41,7 +41,7 @@
             <Column :exportable="false" style="min-width:8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCustomer(slotProps.data)" />
-                    <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteCustomer(slotProps.data)" />
+                    <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteClient(slotProps.data)" />
                 </template>
             </Column>
             <!---->
@@ -89,11 +89,11 @@
 
     </div>
 
-    <!-- Upsert Customer Dialog -->
+    <!-- Upsert Client Dialog -->
     <Dialog
-        v-model:visible="upsertCustomerDialog"
+        v-model:visible="upsertClientDialog"
         :style="{width: '450px'}"
-        header="Customer Details"
+        header="Client Details"
         :modal="true"
         class="p-fluid"
     >   
@@ -101,7 +101,9 @@
         <div class="field">
             <label for="name">Name</label>
             <InputText id="name" v-model.trim="editedClient.Name" required="true" autofocus :class="{'p-invalid': submitted && !editedClient.Name}" />
-            <small class="p-error" v-if="submitted && !editedClient.Name">Name is required.</small>
+            <small class="p-error" v-if="submitted && !editedClient.Name">
+                Name is required.
+            </small>
         </div>
 
         <!-- Email -->
@@ -110,9 +112,9 @@
         <InputText
             id="email"
             v-model.trim="editedClient.Email"
-           
+            :class="{ 'p-invalid': submitted && !editedClient.Email }"
         />
-        <small class="p-error" v-if="submitted">
+        <small class="p-error" v-if="submitted && !editedClient.Email">
             Please enter a valid email address.
         </small>
         </div>
@@ -120,15 +122,12 @@
         <!-- PhoneNumber -->
         <div class="field">
         <label for="phone-number">Phone Number</label>
-        <InputText
+        <InputNumber
             id="phone-number"
-            v-model.trim="editedClient.PhoneNumber"
-            :class="{ 'p-invalid': submitted }"
+            v-model="editedClient.PhoneNumber"
+            :class="{ 'p-invalid': submitted && !editedClient.PhoneNumber }"
         />
-        <small
-            class="p-error"
-            v-if="submitted"
-        >
+        <small class="p-error" v-if="submitted && !editedClient.PhoneNumber">
             Please enter a valid phone number.
         </small>
         </div>
@@ -140,7 +139,7 @@
             id="aniversary"
             v-model="editedClient.Aniversary"
             :showIcon="true"
-            :dateFormat="'mm/dd/yy'"
+            :dateFormat="'yy-mm-dd'"
         />
         </div>
 
@@ -218,32 +217,32 @@
 
 
         <template #footer>
-            <Button label="Cancel" icon="pi pi-times" text @click="closeUpsertCustomerDialog"/>
-            <Button label="Save" icon="pi pi-check" text @click="saveCustomer" />
+            <Button label="Cancel" icon="pi pi-times" text @click="closeupsertClientDialog"/>
+            <Button label="Save" icon="pi pi-check" text @click="upsertClient" />
         </template>
     </Dialog>
 
     <!-- Delete Customer Dialog -->
-    <Dialog v-model:visible="deleteCustomerDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+    <Dialog v-model:visible="deleteClientDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
         <div class="confirmation-content">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
             <span v-if="editedClient">Are you sure you want to delete <b>{{editedClient.Name}}</b>?</span>
         </div>
         <template #footer>
-            <Button label="No" icon="pi pi-times" text @click="deleteCustomerDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" text @click="deleteCustomer" />
+            <Button label="No" icon="pi pi-times" text @click="deleteClientDialog = false"/>
+            <Button label="Yes" icon="pi pi-check" text @click="deleteClient" />
         </template>
     </Dialog>
 
     <!-- Delete Various Customers Dialog -->
-    <Dialog v-model:visible="deleteselectedClientsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+    <Dialog v-model:visible="deleteSelectedClientsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
         <div class="confirmation-content">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span v-if="editedClient">Are you sure you want to delete the selected products?</span>
+            <span v-if="editedClient">Are you sure you want to delete the selected clients?</span>
         </div>
         <template #footer>
-            <Button label="No" icon="pi pi-times" text @click="deleteselectedClientsDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" text @click="deleteselectedClients" />
+            <Button label="No" icon="pi pi-times" text @click="deleteSelectedClientsDialog = false"/>
+            <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedClients" />
         </template>
     </Dialog>
 
@@ -251,11 +250,13 @@
 
 <script lang="ts">
 import { FilterMatchMode } from 'primevue/api';
+import crmAPI from '@/service/crmAPI';
+
 import Client from '~~/types/Client';
 import Agent from '~~/types/Agent';
-import crmAPI from '@/service/crmAPI';
 import Company from '~~/types/Company';
 import EnumType from '~~/types/EnumType';
+import HelperFunctions from '~~/service/HelperFunctions';
 
 export default {
     name: 'DashboardClients',
@@ -278,86 +279,124 @@ export default {
             clientTypes: new Array<EnumType>(),
             statuses: ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'] as Array<string>,
             submitted: false as boolean,
-            upsertCustomerDialog: false as boolean,
-            deleteCustomerDialog: false as boolean,
-            deleteselectedClientsDialog: false as boolean,
+            upsertClientDialog: false as boolean,
+            deleteClientDialog: false as boolean,
+            deleteSelectedClientsDialog: false as boolean,
         };
     },
     methods: {
         exportCSV() : void {
             (this.$refs.dataTableCustomers as any).exportCSV();
         },
-        openUpsertCustomerDialog() : void {
+        openupsertClientDialog() : void {
             this.editedClient = new Client();
             this.submitted = false;
-            this.upsertCustomerDialog = true;
+            this.upsertClientDialog = true;
         },
-        closeUpsertCustomerDialog() : void {
-            this.upsertCustomerDialog = false;
+        closeupsertClientDialog() : void {
+            this.upsertClientDialog = false;
             this.submitted = false;
         },
-        saveCustomer() : void {
+        upsertClient() : void {
             this.submitted = true;
 
 			if (this.editedClient.Name.trim()) {
-                if (this.editedClient.ID) {
-                    this.clients[this.findIndexById(this.editedClient.ID)] = this.editedClient;
-                    this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
+                if (this.editedClient.ID > 0) {
+
+                    crmAPI.updateClient(this.editedClient)
+                        .then((response : any) => {
+                            console.log(response);
+                            this.loadClients();
+                            this.$toast.add({
+                                severity:'success',
+                                summary: 'Successful',
+                                detail: 'Client Updated',
+                                life: 3000
+                            });
+                        })
+                        .catch((error : any) => {
+                            console.log(error);
+                        });
+                
                 }
                 else {
-                    this.editedClient.ID = this.createId();
-                    this.clients.push(this.editedClient);
-                    this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+
+                    crmAPI.createClient(this.editedClient)
+                        .then((response : any) => {
+                            console.log(response);
+                            this.loadClients();
+                            this.$toast.add({
+                                severity:'success',
+                                summary: 'Successful',
+                                detail: 'Client Created',
+                                life: 3000
+                            });
+                        })
+                        .catch((error : any) => {
+                            console.log(error);
+                        });
+                  
                 }
-                this.upsertCustomerDialog = false;
+                
+                this.upsertClientDialog = false;
                 this.editedClient = new Client();
             }
         },
-        editCustomer(_customer : Client) : void {
-            Object.assign(this.editedClient, _customer);
-            this.upsertCustomerDialog = true;
+        editCustomer(_client : Client) : void {
+            Object.assign(this.editedClient, _client);
+            this.upsertClientDialog = true;
         },
-        confirmDeleteCustomer(_customer : Client) : void {
-            Object.assign(this.editedClient, _customer);
-            this.deleteCustomerDialog = true;
+        confirmDeleteClient(_client : Client) : void {
+            Object.assign(this.editedClient, _client);
+            this.deleteClientDialog = true;
         },
-        deleteCustomer() : void {
-            this.clients = this.clients.filter(val => val.ID !== this.editedClient.ID);
-            this.deleteCustomerDialog = false;
-            this.editedClient = new Client();
-            this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+        deleteClient() : void {
+
+            crmAPI.deleteClient(this.editedClient.ID)
+                .then((response : any) => {
+                    console.log(response);
+                    
+                    this.clients = this.clients.filter(val => val.ID !== this.editedClient.ID);
+                    this.deleteClientDialog = false;
+                    this.editedClient = new Client();
+
+                    this.$toast.add({
+                        severity:'success',
+                        summary: 'Successful',
+                        detail: 'Client Deleted',
+                        life: 3000
+                    });
+                })
+                .catch((error : any) => {
+                    console.log(error);
+                });
+
         },
-        confirmDeleteSelected() : void {
-            this.deleteCustomerDialog = true;
+        confirmDeleteSelectedClients() : void {
+            this.deleteSelectedClientsDialog = true;
         },
-        deleteselectedClients() : void {
-            this.clients = this.clients.filter(val => !this.selectedClients.includes(val));
-            this.deleteCustomerDialog = false;
-            this.selectedClients = new Array<Client>();
-            this.$toast.add({severity:'success', summary: 'Successful', detail: 'Customers Deleted', life: 3000});
-        },
-        findIndexById(id : number) : number {
-            let index = -1;
-            for (let i = 0; i < this.clients.length; i++) {
-                if (this.clients[i].ID === id) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        },
-        createId() : number {
-            // generate a and return a random int number
-            let id = Math.floor(Math.random() * 10000);
-            // check if the id already exists
-            for (let i = 0; i < this.clients.length; i++) {
-                let client = this.clients[i];
-                if (client.ID === id) {
-                    id = this.createId();
-                    break;
-                }
-            }
-            return id;
+        deleteSelectedClients() : void {
+
+            Promise.all(this.selectedClients.map((client: Client) => {
+                return crmAPI.deleteClient(client.ID)
+                    .then((response: any) => {
+                        console.log(response);
+                    })
+                    .catch((error: any) => {
+                        console.log(error);
+                    });
+            }))
+            .then(() => {
+                this.loadClients();
+                this.deleteSelectedClientsDialog = false;
+                this.selectedClients = new Array<Client>();
+                this.$toast.add({
+                    severity:'success',
+                    summary: 'Successful',
+                    detail: 'Deleted the selected Clients',
+                    life: 3000
+                });
+            });
         },
 
         // #region API Calls
@@ -366,6 +405,9 @@ export default {
             crmAPI.getClients()
                 .then((response : any) => {
                     this.clients = response.data.clients;
+                    this.clients.forEach((client : Client) => {
+                        client.Aniversary = HelperFunctions.toStringDateFormat(client.Aniversary, false);
+                    });
                     this.loading = false;
                 })
                 .catch((error : any) => {

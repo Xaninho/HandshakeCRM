@@ -8,7 +8,7 @@ export default class Client {
     public Name: string;
     public Email: string;
     public PhotoURL: string;
-    public PhoneNumber: string;
+    public PhoneNumber: number;
     public Aniversary: string;
     public CompanyId: number;
     public FunctionId: number;
@@ -25,7 +25,7 @@ export default class Client {
         this.Name = '';
         this.Email = '';
         this.PhotoURL = '';
-        this.PhoneNumber = '';
+        this.PhoneNumber = 0;
         this.Aniversary = '';
         this.CompanyId = 0
         this.FunctionId = 0;
