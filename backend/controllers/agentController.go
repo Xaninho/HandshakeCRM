@@ -47,7 +47,8 @@ func AgentIndex(c *gin.Context) {
 
 	//Get the posts
 	var agents []models.Agent
-	initializers.DB.Find(&agents)
+
+	initializers.DB.Preload("Position").Find(&agents)
 
 	//Respond with them
 	c.JSON(200, gin.H{

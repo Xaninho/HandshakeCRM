@@ -1,3 +1,5 @@
+import EnumType from "./EnumType";
+
 export default class Agent {
     public ID : number;
     public Name: string;
@@ -6,6 +8,8 @@ export default class Agent {
     public PositionId: number;
     public PhoneNumber: number;
 
+    public Position : EnumType;
+
     constructor() {
         this.ID = -1;
         this.Name = '';
@@ -13,5 +17,6 @@ export default class Agent {
         this.Email = '';
         this.PositionId = 0;
         this.PhoneNumber = 0;
+        this.Position = new EnumType();
     }
 }

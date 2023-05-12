@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Agent from '~~/types/Agent';
 import Client from '~~/types/Client';
 import Company from '~~/types/Company';
 
@@ -60,6 +61,9 @@ export default {
     createCompany(_company : Company) {
         return apiInstance.post('/company', _company);
     },
+    createAgent(_agent : Agent) {
+        return apiInstance.post('/agent', _agent);
+    },
 
     // #endregion
     // ----------
@@ -72,6 +76,9 @@ export default {
     updateCompany(_company : Company) {
         return apiInstance.put('/company/' + _company.ID, _company);
     },
+    updateAgent(_agent : Agent) {
+        return apiInstance.put('/agent/' + _agent.ID, _agent);
+    },
 
     // #endregion
     // ----------
@@ -83,6 +90,9 @@ export default {
     },
     deleteCompany(id: number) {
         return apiInstance.delete(`/company/${id}`);
+    },
+    deleteAgent(id: number) {
+        return apiInstance.delete(`/agent/${id}`);
     },
 
     // #endregion

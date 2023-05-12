@@ -10,4 +10,6 @@ type Agent struct {
 	PositionId  int
 	PhoneNumber int
 	PhotoURL    string
+
+	Position EnumType `gorm:"foreignKey:PositionId"`
 }
