@@ -48,6 +48,9 @@ func main() {
 	r.GET("/currency/:id", controllers.CurrencyShow)
 	r.PUT("/currency/:id", controllers.CurrencyUpdate)
 	r.DELETE("/currency/:id", controllers.CurrencyDelete)
+	r.POST("/signup", controllers.Signup)
+	r.POST("/login", controllers.Login)
+	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 
 	// Countries
 	r.POST("/country", controllers.CountryCreate)
