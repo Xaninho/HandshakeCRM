@@ -24,8 +24,11 @@ type UserRequest struct {
 func Signup(c *gin.Context) {
 
 	var body struct {
-		Email    string
-		Password string
+		Name        string
+		Email       string
+		Password    string
+		PhoneNumber string
+		RoleId      string
 	}
 
 	if c.Bind(&body) != nil {
@@ -44,7 +47,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	user := models.User{Email: body.Email, Password: string(hash)}
+	user := models.User{Email: body.Email, Password: string(hash), Name: body.Name, PhoneNumber: body.PhoneNumber, RoleId: body.RoleId}
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
