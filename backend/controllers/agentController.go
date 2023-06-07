@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/handshakeCRM/go/pkg/mod/github.com/gin-gonic/gin@v1.8.2"
-	"github.com/handshakeCRM/go/pkg/mod/github.com/golang-jwt/jwt@v3.2.2+incompatible"
-	"github.com/handshakeCRM/go/pkg/mod/golang.org/x/crypto@v0.0.0-20211215153901-e495a2d5b3d3/bcrypt"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/handshakeCRM/initializers"
 	"github.com/handshakeCRM/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AgentRequest struct {
@@ -29,7 +29,7 @@ func Signup(c *gin.Context) {
 	}
 
 	if c.Bind(&body) != nil {
-		c.Json(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
 		})
 		return
@@ -39,18 +39,18 @@ func Signup(c *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 	if err != nil {
-		c.Json(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to hash password",
 		})
 		return
 	}
 
 	// Create the user
-	user := models.Player{Email: body.Email, Password: string(hash)}
+	user := models.Agent{Email: body.Email, Password: string(hash)}
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
-		c.Json(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create user",
 		})
 		return
@@ -65,18 +65,18 @@ func Login(c *gin.Context) {
 	}
 
 	if c.Bind(&body) != nil {
-		c.Json(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
 		})
 		return
 	}
 
 	// Look up requested user
-	var user models.Player
+	var user models.Agent
 	initializers.DB.First(&user, "email = ?", body.Email)
 
 	if user.ID == 0 {
-		c.Json(http.StatusUnauthorized, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid Email or Password",
 		})
 		return
@@ -86,7 +86,7 @@ func Login(c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
-		c.Json(http.StatusUnauthorized, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid Email or Password",
 		})
 		return
@@ -99,10 +99,10 @@ func Login(c *gin.Context) {
 	})
 
 	// Sign in ang get the complete endoced token as a string using the secret key
-	tokenString, err := token.SignedString([]byte(os.GetEnv("SECRET_KEY")))
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 
 	if err != nil {
-		c.Json(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create token",
 		})
 		return

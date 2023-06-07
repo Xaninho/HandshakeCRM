@@ -3,10 +3,13 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
-	"github.com/handshakeCRM/go/pkg/mod/github.com/gin-gonic/gin@v1.8.2"
-	"github.com/handshakeCRM/go/pkg/mod/github.com/golang-jwt/jwt@v3.2.2+incompatible"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
+	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/models"
 )
 
 func RequireAuth(c *gin.Context) {
@@ -14,7 +17,9 @@ func RequireAuth(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"error": "Unauthorized",
+		})
 	}
 
 	// Decode/Validate It
@@ -26,23 +31,27 @@ func RequireAuth(c *gin.Context) {
 		}
 
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-		return []byte(os.GetEnv("SECRET_KEY")), nil
+		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 
 		// Check the exp
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
-			c.AbortWithStatusJSON(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "Unauthorized",
+			})
 		}
 
 		// Find the user with token sub
-		var user models.Player
+		var user models.Agent
 
 		initializers.DB.First(&user, claims["userId"])
 
 		if user.ID == 0 {
-			c.AbortWithStatusJSON(http.StatusUnauthorized)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "Unauthorized",
+			})
 		}
 
 		// Attach to req
@@ -52,7 +61,9 @@ func RequireAuth(c *gin.Context) {
 		c.Next()
 
 	} else {
-		c.AbortWithStatusJSON(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"error": "Unauthorized",
+		})
 	}
 
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/handshakeCRM/controllers"
 	"github.com/handshakeCRM/initializers"
+	"github.com/handshakeCRM/middleware"
 )
 
 func init() {
