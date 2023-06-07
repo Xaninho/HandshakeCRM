@@ -7,19 +7,17 @@ import (
 )
 
 type CurrencyRequest struct {
-	Code         string
-	Name         string
-	ExchangeRate float64
+	Code         string  `json:"code"`
+	Name         string  `json:"name"`
+	ExchangeRate float64 `json:"exchangeRate"`
 }
 
 func CurrencyCreate(c *gin.Context) {
 
-	// Get data off req body
 	var body CurrencyRequest
 
 	c.Bind(&body)
 
-	// Create a post
 	currency := models.Currency{
 		Code:         body.Code,
 		Name:         body.Name,
@@ -33,7 +31,6 @@ func CurrencyCreate(c *gin.Context) {
 		return
 	}
 
-	// Return it
 	c.JSON(200, gin.H{
 		"currency": currency,
 	})
@@ -42,11 +39,9 @@ func CurrencyCreate(c *gin.Context) {
 
 func CurrencyIndex(c *gin.Context) {
 
-	//Get the posts
 	var currencies []models.Currency
 	initializers.DB.Find(&currencies)
 
-	//Respond with them
 	c.JSON(200, gin.H{
 		"currencies": currencies,
 	})
@@ -54,14 +49,11 @@ func CurrencyIndex(c *gin.Context) {
 
 func CurrencyShow(c *gin.Context) {
 
-	//get id off url
 	id := c.Param("id")
 
-	//Get the posts
 	var currency []models.Currency
 	initializers.DB.First(&currency, id)
 
-	//Respond with them
 	c.JSON(200, gin.H{
 		"currency": currency,
 	})
@@ -69,26 +61,21 @@ func CurrencyShow(c *gin.Context) {
 
 func CurrencyUpdate(c *gin.Context) {
 
-	// Get the id off the url
 	id := c.Param("id")
 
-	// Get the data off req body
 	var body CurrencyRequest
 
 	c.Bind(&body)
 
-	// Find the post were updating
 	var currency models.Currency
 	initializers.DB.First(&currency, id)
 
-	// Update it
 	initializers.DB.Model(&currency).Updates(models.Currency{
 		Code:         body.Code,
 		Name:         body.Name,
 		ExchangeRate: body.ExchangeRate,
 	})
 
-	// Respond with it
 	c.JSON(200, gin.H{
 		"currency": currency,
 	})
@@ -97,12 +84,9 @@ func CurrencyUpdate(c *gin.Context) {
 
 func CurrencyDelete(c *gin.Context) {
 
-	// Get the id off the url
 	id := c.Param("id")
 
-	// Delete the company
 	initializers.DB.Delete(&models.Currency{}, id)
 
-	// Respond
 	c.Status(200)
 }

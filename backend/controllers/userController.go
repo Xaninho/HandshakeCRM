@@ -12,17 +12,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AgentRequest struct {
+type UserRequest struct {
+	ID          uint   `json:"id"`
 	Name        string `json:"name"`
 	Email       string `json:"email"`
-	PositionId  int    `json:"positionId"`
-	PhoneNumber int    `json:"phoneNumber"`
-	PhotoURL    string `json:"photoURL"`
+	Password    string `json:"password"`
+	PhoneNumber string `json:"phoneNumber"`
+	RoleId      string `json:"roleId"`
 }
 
 func Signup(c *gin.Context) {
 
-	// Get the email/pass off req body
 	var body struct {
 		Email    string
 		Password string
@@ -35,7 +35,6 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// Hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 	if err != nil {
@@ -45,8 +44,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// Create the user
-	user := models.Agent{Email: body.Email, Password: string(hash)}
+	user := models.User{Email: body.Email, Password: string(hash)}
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
@@ -58,7 +56,7 @@ func Signup(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	// Get the email/pass off req body
+
 	var body struct {
 		Email    string
 		Password string
@@ -71,8 +69,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Look up requested user
-	var user models.Agent
+	var user models.User
 	initializers.DB.First(&user, "email = ?", body.Email)
 
 	if user.ID == 0 {
@@ -82,7 +79,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Compare sent in pass with saved user pass
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
@@ -92,13 +88,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Create a JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": user.ID,
 		"exp":    time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	// Sign in ang get the complete endoced token as a string using the secret key
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 
 	if err != nil {
@@ -108,7 +102,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// send it back
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 60*60*24*30, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{})
@@ -122,100 +115,84 @@ func Validate(c *gin.Context) {
 	})
 }
 
-func AgentCreate(c *gin.Context) {
+func UserCreate(c *gin.Context) {
 
-	// Get data off req body
-	var body AgentRequest
+	var body UserRequest
 	c.Bind(&body)
 
-	// Create a post
-	agent := models.Agent{
+	user := models.User{
 		Name:        body.Name,
 		Email:       body.Email,
-		PositionId:  body.PositionId,
+		Password:    body.Password,
 		PhoneNumber: body.PhoneNumber,
-		PhotoURL:    body.PhotoURL,
+		RoleId:      body.RoleId,
 	}
 
-	result := initializers.DB.Create(&agent)
+	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
 		c.Status(400)
 		return
 	}
 
-	// Return it
 	c.JSON(200, gin.H{
-		"agent": agent,
+		"user": user,
 	})
 
 }
 
-func AgentIndex(c *gin.Context) {
+func UserIndex(c *gin.Context) {
 
-	//Get the posts
-	var agents []models.Agent
+	var users []models.User
 
-	initializers.DB.Preload("Position").Find(&agents)
+	initializers.DB.Preload("Role").Find(&users)
 
-	//Respond with them
 	c.JSON(200, gin.H{
-		"agents": agents,
+		"users": users,
 	})
 }
 
-func AgentShow(c *gin.Context) {
+func UserShow(c *gin.Context) {
 
-	//get id off url
 	id := c.Param("id")
 
-	//Get the posts
-	var agent []models.Agent
-	initializers.DB.First(&agent, id)
+	var user []models.User
+	initializers.DB.First(&user, id)
 
-	//Respond with them
 	c.JSON(200, gin.H{
-		"agent": agent,
+		"user": user,
 	})
 }
 
-func AgentUpdate(c *gin.Context) {
+func UserUpdate(c *gin.Context) {
 
-	// Get the id off the url
 	id := c.Param("id")
 
-	// Get the data off req body
-	var body AgentRequest
+	var body UserRequest
 	c.Bind(&body)
 
-	// Find the post were updating
-	var agent models.Agent
-	initializers.DB.First(&agent, id)
+	var user models.User
+	initializers.DB.First(&user, id)
 
-	// Update it
-	initializers.DB.Model(&agent).Updates(models.Agent{
+	initializers.DB.Model(&user).Updates(models.User{
 		Name:        body.Name,
 		Email:       body.Email,
-		PositionId:  body.PositionId,
+		Password:    body.Password,
 		PhoneNumber: body.PhoneNumber,
-		PhotoURL:    body.PhotoURL,
+		RoleId:      body.RoleId,
 	})
 
-	// Respond with it
 	c.JSON(200, gin.H{
-		"agent": agent,
+		"user": user,
 	})
 
 }
 
-func AgentDelete(c *gin.Context) {
+func UserDelete(c *gin.Context) {
 
-	// Get the id off the url
 	id := c.Param("id")
 
-	// Delete the company
-	initializers.DB.Delete(&models.Agent{}, id)
+	initializers.DB.Delete(&models.User{}, id)
 
-	// Respond
 	c.Status(200)
 }

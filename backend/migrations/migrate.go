@@ -5,19 +5,18 @@ import (
 	"github.com/handshakeCRM/models"
 )
 
-
 func init() {
-	initializers.LoadEnvVariables();
-	initializers.ConnectToDb();
+	initializers.LoadEnvVariables()
+	initializers.ConnectToDb()
 }
 
 func main() {
 	initializers.DB.AutoMigrate(
-        &models.Company{},
-        &models.Client{},
-        &models.Country{},
-        &models.Currency{},
-        &models.Agent{},
-        &models.EnumType{},
-    )
+		&models.Company{},
+		&models.Contact{},
+		&models.Country{},
+		&models.Currency{},
+		&models.User{},
+		&models.EnumType{},
+	)
 }

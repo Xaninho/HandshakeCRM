@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 func ConnectToDb() {
-	var err error
+	/*var err error
 
 	server := os.Getenv("AZURE_SERVER")
 	user := os.Getenv("AZURE_USER")
@@ -20,6 +20,14 @@ func ConnectToDb() {
 	database := os.Getenv("AZURE_DATABASE")
 
 	dsn := "server=" + server + ";user id=" + user + ";password=" + password + ";port=" + port + ";database=" + database + ";"
+	DB, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal("Failed to connect")
+		log.Fatal(DB)
+	}*/
+	var err error
+	dsn := os.Getenv("DB_CONNECTION_STRING")
 	DB, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 
 	if err != nil {

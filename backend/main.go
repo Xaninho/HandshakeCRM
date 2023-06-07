@@ -22,6 +22,14 @@ func main() {
 	config.AllowOrigins = []string{"http://localhost:4500"} // Set your desired origins here
 	r.Use(cors.New(config))
 
+	// Users
+	r.POST("/user", controllers.UserCreate)
+	r.GET("/user", controllers.UserIndex)
+	r.GET("/user/:id", controllers.UserShow)
+	r.PUT("/user/:id", controllers.UserUpdate)
+	r.DELETE("/user/:id", controllers.UserDelete)
+	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+
 	// Companies
 	r.POST("/company", controllers.CompanyCreate)
 	r.GET("/company", controllers.CompanyIndex)
@@ -29,19 +37,12 @@ func main() {
 	r.PUT("/company/:id", controllers.CompanyUpdate)
 	r.DELETE("/company/:id", controllers.CompanyDelete)
 
-	// Clients
-	r.POST("/client", controllers.ClientCreate)
-	r.GET("/client", controllers.ClientIndex)
-	r.GET("/client/:id", controllers.ClientShow)
-	r.PUT("/client/:id", controllers.ClientUpdate)
-	r.DELETE("/client/:id", controllers.ClientDelete)
-
-	// Agents
-	r.POST("/agent", controllers.AgentCreate)
-	r.GET("/agent", controllers.AgentIndex)
-	r.GET("/agent/:id", controllers.AgentShow)
-	r.PUT("/agent/:id", controllers.AgentUpdate)
-	r.DELETE("/agent/:id", controllers.AgentDelete)
+	// Contacts
+	r.POST("/contact", controllers.ContactCreate)
+	r.GET("/contact", controllers.ContactIndex)
+	r.GET("/contact/:id", controllers.ContactShow)
+	r.PUT("/contact/:id", controllers.ContactUpdate)
+	r.DELETE("/contact/:id", controllers.ContactDelete)
 
 	// Currencies
 	r.POST("/currency", controllers.CurrencyCreate)
@@ -51,7 +52,6 @@ func main() {
 	r.DELETE("/currency/:id", controllers.CurrencyDelete)
 	r.POST("/signup", controllers.Signup)
 	r.POST("/login", controllers.Login)
-	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 
 	// Countries
 	r.POST("/country", controllers.CountryCreate)

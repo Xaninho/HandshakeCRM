@@ -13,9 +13,9 @@ import (
 )
 
 func RequireAuth(c *gin.Context) {
+
 	// Get the cookie off req
 	tokenString, err := c.Cookie("Authorization")
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": "Unauthorized",
@@ -23,14 +23,10 @@ func RequireAuth(c *gin.Context) {
 	}
 
 	// Decode/Validate It
-
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
 
@@ -44,7 +40,7 @@ func RequireAuth(c *gin.Context) {
 		}
 
 		// Find the user with token sub
-		var user models.Agent
+		var user models.User
 
 		initializers.DB.First(&user, claims["userId"])
 
