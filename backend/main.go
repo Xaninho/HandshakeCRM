@@ -19,7 +19,8 @@ func main() {
 
 	// Set up CORS middleware
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:4500"} // Set your desired origins here
+	config.AllowOrigins = []string{"http://localhost:4500"}         // Set your desired origins here
+	config.AllowHeaders = []string{"Authorization", "Content-Type"} // Add the desired headers here
 	r.Use(cors.New(config))
 
 	// Users

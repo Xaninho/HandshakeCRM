@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import Agent from '~~/types/Agent';
 import Client from '~~/types/Client';
 import Company from '~~/types/Company';
@@ -8,6 +9,16 @@ const API_BASE_URL = 'http://localhost:3000/';
 
 const apiInstance = axios.create({
     baseURL: API_BASE_URL,
+});
+
+const authCookie = useCookie("authHandshakeCRM");
+apiInstance.interceptors.request.use((config) => {
+
+    const authHandshakeCRM = authCookie.value;
+    if (authHandshakeCRM) {
+      config.headers.Authorization = `${authHandshakeCRM}`;
+    }
+    return config;
 });
 
 export default {
@@ -63,6 +74,9 @@ export default {
     },
     createAgent(_agent : Agent) {
         return apiInstance.post('/agent', _agent);
+    },
+    login(_email: string, _password: string) {
+        return apiInstance.post('/login', {email: _email, password: _password});
     },
 
     // #endregion

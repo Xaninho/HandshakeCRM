@@ -1,65 +1,95 @@
 <template>
-  <main>
-    <div class="card">
-        <Chart type="bar" :data="chartData" :options="chartOptions" />
+  <div>
+    <h1>Login</h1>
+    <div class="flex flex-column gap-2">
+      <label for="email">Email</label>
+      <InputText id="email" v-model="email"/>
+      
+      <label for="password">Password</label>
+      <Password v-model="password" :feedback="false" />
+
+      <Button type="submit" @click="login">Login</Button>
     </div>
-    <div class="card card-container">
-        <Chart type="pie" :data="chartData" :options="chartOptions" class="chart-container" />
-        <Chart type="line" :data="chartData" :options="chartOptions" class="chart-container" />
-    </div>
-  </main>
-  
+  </div>
 </template>
 
-<script lang='ts'>
+<script setup lang="ts">
+  definePageMeta({
+      layout: "landing-layout",
+  });
+</script>
 
+<script lang="ts">
+import LandingLayout from '~/layouts/landingLayout.vue';
+import crmAPI from '~~/service/crmAPI';
+import Cookies from 'universal-cookie';
 
 export default defineComponent({
-  name: "HomeDashboard",
+  name: 'LoginPage',
+  layout: LandingLayout,
   data() {
     return {
-       chartData: {
-          labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-          datasets: [
-              {
-                  label: 'Sales',
-                  data: [540, 325, 702, 620],
-                  backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)'],
-                  borderColor: ['rgb(255, 159, 64)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)'],
-                  borderWidth: 1
-              }
-          ]
-        },
-        chartOptions: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    }
-   
-  }
+      email: '' as string,
+      password: '' as string,
+    };
+  },
+  methods: {
+    login() {
+
+     
+      crmAPI.login(this.email, this.password)
+        .then((response : any) => {
+
+          const authCookie = response.data.token;
+        
+          const cookies = new Cookies();
+          const current = new Date();
+          const nextYear = new Date();
+
+          nextYear.setFullYear(current.getFullYear() + 1);
+
+          cookies.set('authHandshakeCRM', authCookie, {
+              path: '/',
+              expires: nextYear,
+          });
+
+      })
+      .catch((error : any) => {
+        console.log(error);
+      });
+      
+    },
+  },
 });
-
-
-
 </script>
 
 <style scoped>
-  .card-container {
+.login-page {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+form {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
-.chart-container {
-  flex: 1;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+label {
+  margin-bottom: 8px;
 }
 
-.chart-container:last-child {
-  margin-right: 0;
+input[type="email"],
+input[type="password"] {
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+button[type="submit"] {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
 </style>

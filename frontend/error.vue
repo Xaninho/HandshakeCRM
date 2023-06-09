@@ -16,7 +16,7 @@
         Page not found ...
       </h1>
       <div class="col-12 mt-5 text-center">
-        <Button icon="pi pi-arrow-left" label="Back to home" @click="router.push('/')" />
+        <Button icon="pi pi-arrow-left" label="Back to home" @click="router.push('/dashboard')" />
       </div>
     </div>
     

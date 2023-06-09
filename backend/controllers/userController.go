@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -60,6 +61,9 @@ func Signup(c *gin.Context) {
 
 func Login(c *gin.Context) {
 
+	// log function
+	log.Println("Login function called")
+
 	var body struct {
 		Email    string
 		Password string
@@ -107,7 +111,11 @@ func Login(c *gin.Context) {
 
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 60*60*24*30, "", "", false, true)
-	c.JSON(http.StatusOK, gin.H{})
+
+	// return the tokenString to the frontend
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+	})
 }
 
 func Validate(c *gin.Context) {

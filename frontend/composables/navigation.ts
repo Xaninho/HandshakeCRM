@@ -5,20 +5,20 @@ export function useNavigationMenu() {
         {
           label: 'Home',
           items: [{
-            label: 'Dashboard', to: '/', icon: 'pi pi-fw pi-home',
+            label: 'Dashboard', to: '/dashboard', icon: 'pi pi-fw pi-home',
           }],
         },
         {
           label: 'Clients',
           items: [
-            { label: 'Clients', icon: 'pi pi-fw pi-id-card', to: '/clients/dashboardClients' },
-            { label: 'Companies', icon: 'pi pi-fw pi-truck', to: '/clients/dashboardCompanies' },
+            { label: 'Clients', icon: 'pi pi-fw pi-id-card', to: '/dashboard/clients/dashboardClients' },
+            { label: 'Companies', icon: 'pi pi-fw pi-truck', to: '/dashboard/clients/dashboardCompanies' },
           ],
         },
         {
           label: 'Admin',
           items: [
-            { label: 'Manage Players', icon: 'pi pi-fw pi-users', to: '/admin/dashboardPlayers' },
+            { label: 'Manage Players', icon: 'pi pi-fw pi-users', to: '/dashboard/admin/dashboardPlayers' },
           ],
         } 
       ]

@@ -360,6 +360,10 @@ export default {
               })
               .catch((error : any) => {
                   console.log(error);
+                  if (error.response && error.response.status === 401) {
+                    this.$router.push('/');
+                    }
+
                   this.loading = false;
               });
       },
