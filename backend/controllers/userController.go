@@ -14,12 +14,12 @@ import (
 )
 
 type UserRequest struct {
-	ID          uint   `json:"id"`
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-	PhoneNumber string `json:"phoneNumber"`
-	RoleId      string `json:"roleId"`
+	ID          uint
+	Name        string
+	Email       string
+	Password    string
+	PhoneNumber string
+	RoleId      string
 }
 
 func Signup(c *gin.Context) {

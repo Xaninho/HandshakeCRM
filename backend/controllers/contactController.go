@@ -11,13 +11,13 @@ import (
 )
 
 type ContactRequest struct {
-	ID            uint   `json:"id"`
-	CompanyId     uint   `json:"companyId"`
-	Name          string `json:"name"`
-	Email         string `json:"email"`
-	PhoneNumber   string `json:"phoneNumber"`
-	Aniversary    string `json:"aniversary"`
-	DispositionId int    `json:"dispositionId"`
+	ID            uint
+	CompanyId     uint
+	Name          string
+	Email         string
+	PhoneNumber   string
+	Aniversary    string
+	DispositionId int
 }
 
 func ContactCreate(c *gin.Context) {

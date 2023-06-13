@@ -7,9 +7,9 @@ import (
 )
 
 type CurrencyRequest struct {
-	Code         string  `json:"code"`
-	Name         string  `json:"name"`
-	ExchangeRate float64 `json:"exchangeRate"`
+	Code         string
+	Name         string
+	ExchangeRate float64
 }
 
 func CurrencyCreate(c *gin.Context) {

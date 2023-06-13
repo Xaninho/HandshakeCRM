@@ -7,14 +7,14 @@ import (
 )
 
 type CompanyRequest struct {
-	NIF                  int    `json:"nif"`
-	Name                 string `json:"name"`
-	CurrencyId           int    `json:"currencyId"`
-	HasElectronicBilling bool   `json:"hasElectronicBilling"`
-	CountryId            int    `json:"countryId"`
-	PostalCode           string `json:"postalCode"`
-	Address              string `json:"address"`
-	Notes                string `json:"notes"`
+	NIF                  int
+	Name                 string
+	CurrencyId           int
+	HasElectronicBilling bool
+	CountryId            int
+	PostalCode           string
+	Address              string
+	Notes                string
 }
 
 func CompanyCreate(c *gin.Context) {
@@ -70,7 +70,7 @@ func CompanyShow(c *gin.Context) {
 
 func CompanyUpdate(c *gin.Context) {
 
-	id := c.Param("id")
+	id := c.Param("ID")
 
 	var body CompanyRequest
 	c.Bind(&body)

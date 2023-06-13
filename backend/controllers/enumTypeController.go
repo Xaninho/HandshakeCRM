@@ -7,9 +7,9 @@ import (
 )
 
 type EnumTypeRequest struct {
-	Type        string `json:"type"`
-	Description string `json:"description"`
-	Active      bool   `json:"active"`
+	Type        string
+	Description string
+	Active      bool
 }
 
 func EnumTypeCreate(c *gin.Context) {

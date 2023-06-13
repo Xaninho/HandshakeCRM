@@ -7,9 +7,9 @@ import (
 )
 
 type CountryRequest struct {
-	Name        string `json:"name"`
-	CurrencyId  int    `json:"currencyId"`
-	ContinentId int    `json:"continentId"`
+	Name        string
+	CurrencyId  int
+	ContinentId int
 }
 
 func CountryCreate(c *gin.Context) {

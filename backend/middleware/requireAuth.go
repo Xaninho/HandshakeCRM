@@ -33,9 +33,6 @@ func RequireAuth(c *gin.Context) {
 	})
 
 	// log these
-	fmt.Println("tokenString: ", tokenString)
-	fmt.Println("token: ", token.Valid)
-	fmt.Println("err: ", err)
 	if err != nil || !token.Valid {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": "Unauthorized2",

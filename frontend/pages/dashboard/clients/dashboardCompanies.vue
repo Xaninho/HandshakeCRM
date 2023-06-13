@@ -71,6 +71,15 @@
       :modal="true"
       class="p-fluid"
   >   
+        <!-- NIF -->
+        <div class="field">
+            <label for="nif">NIF</label>
+            <InputNumber id="nif" v-model.trim="editedCompany.NIF"  :useGrouping="false" required="true" autofocus :class="{'p-invalid': submitted && !editedCompany.NIF}" />
+            <small class="p-error" v-if="submitted && !editedCompany.NIF">
+                NIF is required.
+            </small>
+        </div>
+      
       <!-- Name -->
       <div class="field">
           <label for="name">Name</label>
@@ -79,35 +88,20 @@
               Name is required.
           </small>
       </div>
-
-      <!-- State -->
-      <div class="field">
-      <label for="state">Company State</label>
-      <Dropdown
-          v-model="selectedCompanyStateType"
-          :options="companyStates"
-          :item-value="'ID'"
-          optionLabel="Description"
-          placeholder="Select the State of the Company"
-      />
-      <small v-if="submitted && !editedCompany.StateId" class="p-error">
-           Company State is required.
-      </small>
-      </div>
       
       <!-- Country -->
       <div class="field">
-      <label for="country">Country</label>
-      <Dropdown
-          v-model="selectedCompanyCountry"
-          :options="countries"
-          :item-value="'ID'"
-          optionLabel="Name"
-          placeholder="Select an Country to assign"
-      />
-      <small v-if="submitted && !editedCompany.CountryId" class="p-error">
-        Assigned Agent is required.
-      </small>
+        <label for="country">Country</label>
+        <Dropdown
+            v-model="selectedCompanyCountry"
+            :options="countries"
+            :item-value="'ID'"
+            optionLabel="Name"
+            placeholder="Select an Country to assign"
+        />
+        <small v-if="submitted && !editedCompany.CountryId" class="p-error">
+            Country is required.
+        </small>
       </div>
 
       <!-- Address -->
@@ -218,14 +212,13 @@ export default {
           countries: new Array<Country>(),
           selectedCompanies: new Array<Company>(),
           currencies: new Array<Currency>(),
-          companyStates: new Array<EnumType>(),
           loading: true as boolean,
           filters: {
               global: { value: null, matchMode: FilterMatchMode.CONTAINS },
               Name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
               Country: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
           },
-          statuses: ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'] as Array<string>,
+
           submitted: false as boolean,
           upsertCompanyDialog: false as boolean,
           deleteCompanyDialog: false as boolean,
@@ -290,13 +283,14 @@ export default {
               this.editedCompany = new Company();
           }
       },
-      editCompany(_client : Client) : void {
-          console.log('editCompany')
-          Object.assign(this.editedCompany, _client);
+      editCompany(_company : Company) : void {
+          console.log('_company', _company);
+          Object.assign(this.editedCompany, _company);
+          console.log('this.editedCompany', this.editedCompany);
           this.upsertCompanyDialog = true;
       },
-      confirmDeleteCompany(_client : Client) : void {
-          Object.assign(this.editedCompany, _client);
+      confirmDeleteCompany(_company : Company) : void {
+          Object.assign(this.editedCompany, _company);
           this.deleteCompanyDialog = true;
       },
       deleteCompany() : void {
@@ -376,15 +370,6 @@ export default {
                   console.log(error);
               });
       },
-      loadCompanyStates() : void {
-          crmAPI.getEnumTypes('CompanyState')
-              .then((response : any) => {
-                  this.companyStates = response.data.enumTypes;
-              })
-              .catch((error : any) => {
-                  console.log(error);
-              });
-      },
       loadCountries() : void {
           crmAPI.getCountries()
               .then((response : any) => {
@@ -394,24 +379,10 @@ export default {
                   console.log(error);
               });
       },
-     
 
       // #endregion
   },
   computed: {
-      selectedCompanyStateType: {
-        get() {
-            if (this.editedCompany) {
-                return this.companyStates.find(state => state.ID === this.editedCompany.StateId);
-            } else {
-                return null;
-            }
-        },
-        set(value : any) {
-            this.editedCompany.StateId = value.ID;
-            this.editedCompany.State = value;
-        }
-      },
       selectedCompanyCountry: {
         get() {
             if (this.editedCompany) {
@@ -444,7 +415,6 @@ export default {
   mounted() {
       this.loadCompanies();
       this.loadCurrencies();
-      this.loadCompanyStates();
       this.loadCountries();
   },
 
