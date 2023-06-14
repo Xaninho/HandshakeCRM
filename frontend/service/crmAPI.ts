@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 import Agent from '~~/types/Agent';
-import Client from '~~/types/Client';
+import Client from '~~/types/Contact';
 import Company from '~~/types/Company';
+import Contact from '~~/types/Contact';
 
 // Define the base URL for the CRM API
 const API_BASE_URL = 'http://localhost:3000/';
@@ -25,11 +26,11 @@ export default {
 
     // #region Get Requests
     
-    getClients() {
-        return apiInstance.get('/client');
+    getContacts() {
+        return apiInstance.get('/contact');
     },
-    getClient(id: number) {
-        return apiInstance.get(`/client/${id}`);
+    getContact(id: number) {
+        return apiInstance.get(`/contact/${id}`);
     },
     getCompanies() {
         return apiInstance.get('/company');
@@ -66,8 +67,8 @@ export default {
 
     // #region Post Requests
 
-    createClient(_client : Client) {
-        return apiInstance.post('/client', _client);
+    createContact(_contact : Contact) {
+        return apiInstance.post('/contact', _contact);
     },
     createCompany(_company : Company) {
         return apiInstance.post('/company', _company);
@@ -84,8 +85,8 @@ export default {
     
     // #region Put Requests
 
-    updateClient(_client : Client) {
-        return apiInstance.put('/client/' + _client.ID, _client);
+    updateContact(_contact : Contact) {
+        return apiInstance.put('/contact/' + _contact.ID, _contact);
     },
     updateCompany(_company : Company) {
         return apiInstance.put('/company/' + _company.ID, _company);
@@ -99,8 +100,8 @@ export default {
     
     // #region Delete Requests
 
-    deleteClient(id: number) {
-        return apiInstance.delete(`/client/${id}`);
+    deleteContact(id: number) {
+        return apiInstance.delete(`/contact/${id}`);
     },
     deleteCompany(id: number) {
         return apiInstance.delete(`/company/${id}`);

@@ -11,7 +11,7 @@ export function useNavigationMenu() {
         {
           label: 'Clients',
           items: [
-            { label: 'Clients', icon: 'pi pi-fw pi-id-card', to: '/dashboard/clients/dashboardClients' },
+            { label: 'Contacts', icon: 'pi pi-fw pi-id-card', to: '/dashboard/clients/dashboardContacts' },
             { label: 'Companies', icon: 'pi pi-fw pi-truck', to: '/dashboard/clients/dashboardCompanies' },
           ],
         },

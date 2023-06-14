@@ -197,7 +197,7 @@
 import { FilterMatchMode } from 'primevue/api';
 import crmAPI from '@/service/crmAPI';
 
-import Client from '~~/types/Client';
+import Client from '~~/types/Contact';
 import Company from '~~/types/Company';
 import Currency from '~~/types/Currency';
 import EnumType from '~~/types/EnumType';
