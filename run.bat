@@ -1,2 +1,2 @@
 @echo off
-go run main.go
+call go run main.go
