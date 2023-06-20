@@ -26,6 +26,7 @@ func main() {
 	// Users
 	r.GET("/validate", controllers.Validate)
 	r.POST("/login", controllers.Login)
+	r.POST("/signup", middleware.RequireAuth, controllers.Signup)
 
 	r.POST("/user", middleware.RequireAuth, controllers.UserCreate)
 	r.GET("/user", middleware.RequireAuth, controllers.UserIndex)
@@ -53,7 +54,6 @@ func main() {
 	r.GET("/currency/:id", middleware.RequireAuth, controllers.CurrencyShow)
 	r.PUT("/currency/:id", middleware.RequireAuth, controllers.CurrencyUpdate)
 	r.DELETE("/currency/:id", middleware.RequireAuth, controllers.CurrencyDelete)
-	r.POST("/signup", middleware.RequireAuth, controllers.Signup)
 
 	// Countries
 	r.POST("/country", middleware.RequireAuth, controllers.CountryCreate)
@@ -61,6 +61,13 @@ func main() {
 	r.GET("/country/:id", middleware.RequireAuth, controllers.CountryShow)
 	r.PUT("/country/:id", middleware.RequireAuth, controllers.CountryUpdate)
 	r.DELETE("/country/:id", middleware.RequireAuth, controllers.CountryDelete)
+
+	//  Activities
+	r.POST("/activity", controllers.ActivityCreate)
+	r.GET("/activity", controllers.ActivityIndex)
+	r.GET("/activity/:id", controllers.ActivityShow)
+	r.PUT("/activity/:id", controllers.ActivityUpdate)
+	r.DELETE("/activity/:id", controllers.ActivityDelete)
 
 	// EnumTypes
 	r.POST("/enumType", middleware.RequireAuth, controllers.EnumTypeCreate)

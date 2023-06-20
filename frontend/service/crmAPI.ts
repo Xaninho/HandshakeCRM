@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import Agent from '~~/types/Agent';
-import Client from '~~/types/Contact';
 import Company from '~~/types/Company';
 import Contact from '~~/types/Contact';
 

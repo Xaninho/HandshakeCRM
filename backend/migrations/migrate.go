@@ -18,5 +18,6 @@ func main() {
 		&models.Currency{},
 		&models.User{},
 		&models.EnumType{},
+		&models.Activity{},
 	)
 }
