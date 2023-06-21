@@ -13,6 +13,7 @@ export function useNavigationMenu() {
           items: [
             { label: 'Contacts', icon: 'pi pi-fw pi-id-card', to: '/dashboard/clients/dashboardContacts' },
             { label: 'Companies', icon: 'pi pi-fw pi-truck', to: '/dashboard/clients/dashboardCompanies' },
+            { label: 'Activities', icon: 'pi pi-fw pi-calendar', to: '/dashboard/clients/dashboardActivities' },
           ],
         },
         {

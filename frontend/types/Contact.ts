@@ -1,4 +1,4 @@
-import Agent from "./Agent";
+import Agent from "./User";
 import Company from "./Company";
 import EnumType from "./EnumType";
 

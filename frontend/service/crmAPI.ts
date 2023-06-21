@@ -1,8 +1,8 @@
 import axios from 'axios';
-
-import Agent from '~~/types/Agent';
+import Activity from '~~/types/Activity';
 import Company from '~~/types/Company';
 import Contact from '~~/types/Contact';
+import User from '~~/types/User';
 
 // Define the base URL for the CRM API
 const API_BASE_URL = 'http://localhost:3000/';
@@ -37,11 +37,17 @@ export default {
     getCompany(id: number) {
         return apiInstance.get(`/company/${id}`);
     },
-    getAgents(){
-        return apiInstance.get('/agent');
+    getUsers(){
+        return apiInstance.get('/user');
     },
-    getAgent(id: number) {
-        return apiInstance.get(`/agent/${id}`);
+    getUser(id: number) {
+        return apiInstance.get(`/user/${id}`);
+    },
+    getActivities() {
+        return apiInstance.get('/activity');
+    },
+    getActivity(id: number) {
+        return apiInstance.get(`/activity/${id}`);
     },
 
     getCurrencies() {
@@ -72,8 +78,11 @@ export default {
     createCompany(_company : Company) {
         return apiInstance.post('/company', _company);
     },
-    createAgent(_agent : Agent) {
-        return apiInstance.post('/agent', _agent);
+    createUser(_user : User) {
+        return apiInstance.post('/user', _user);
+    },
+    createActivity(_activity : Activity) {
+        return apiInstance.post('/activity', _activity);
     },
     login(_email: string, _password: string) {
         return apiInstance.post('/login', {email: _email, password: _password});
@@ -90,8 +99,11 @@ export default {
     updateCompany(_company : Company) {
         return apiInstance.put('/company/' + _company.ID, _company);
     },
-    updateAgent(_agent : Agent) {
-        return apiInstance.put('/agent/' + _agent.ID, _agent);
+    updateUser(_user : User) {
+        return apiInstance.put('/user/' + _user.ID, _user);
+    },
+    updateActivity(_activity : Activity) {
+        return apiInstance.put('/activity/' + _activity.ID, _activity);
     },
 
     // #endregion
@@ -107,6 +119,9 @@ export default {
     },
     deleteAgent(id: number) {
         return apiInstance.delete(`/agent/${id}`);
+    },
+    deleteActivity(id: number) {
+        return apiInstance.delete(`/activity/${id}`);
     },
 
     // #endregion
