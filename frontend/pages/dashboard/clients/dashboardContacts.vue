@@ -31,12 +31,16 @@
             ref="dataTableCustomers"
             v-model:selection="selectedContacts"
             :class="`p-datatable-sm`"
+            v-model:expandedRows="expandedRows"
+            @rowExpand="onRowExpand"
+            @rowCollapse="onRowCollapse"
         >
             <!-- Loaders -->
             <template #empty> No contacts found. </template>
             <template #loading> Loading contacts data. Please wait. </template>
 
             <!-- Columns Setup -->
+            <Column expander style="width: 5rem" />
             <Column selectionMode="multiple" style="width: 1rem" :exportable="false"></Column>
             <Column :exportable="false" style="min-width:8rem">
                 <template #body="slotProps">
@@ -65,6 +69,17 @@
                     <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by name" />
                 </template>
             </Column>
+
+            <template #expansion="slotProps">
+                <div class="p-3">
+                    <h5>Orders for {{ slotProps.data.name }}</h5>
+                    <DataTable :value="slotProps.data.AssociatedActivities">
+                        <Column field="Title" header="Title" sortable></Column>
+                        <Column field="Date" header="Date" sortable></Column>
+                        <Column field="Location" header="Location" sortable></Column>
+                    </DataTable>
+                </div>
+            </template>
 
         </DataTable>
 
@@ -198,7 +213,6 @@ import { FilterMatchMode } from 'primevue/api';
 import crmAPI from '@/service/crmAPI';
 
 import Contact from '~~/types/Contact';
-import Agent from '~~/types/Agent';
 import Company from '~~/types/Company';
 import EnumType from '~~/types/EnumType';
 import HelperFunctions from '~~/service/HelperFunctions';
@@ -211,6 +225,7 @@ export default {
             contacts: new Array<Contact>(),
             selectedContacts: new Array<Contact>(),
             loading: true as boolean,
+            expandedRows: [],
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 Name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -340,6 +355,55 @@ export default {
                     life: 3000
                 });
             });
+        },
+        onRowExpand(event : any) {
+
+            this.contacts.forEach((contact : Contact) => {
+                if (contact.ID == event.data.ID) {
+                    contact.isLoading = true;
+                }
+            });
+            
+            crmAPI.getActivitiesByContact(event.data.ID)
+                .then((response : any) => {
+                    console.log(response);
+
+                    this.contacts.forEach((contact : Contact) => {
+                        if (contact.ID == event.data.ID) {
+                            contact.AssociatedActivities = response.data.activities;
+                            contact.isLoading = false;
+                        }
+                    });
+                })
+                .catch((error : any) => {
+                    console.log(error);
+
+                    this.contacts.forEach((contact : Contact) => {
+                        if (contact.ID == event.data.ID) {
+                            contact.isLoading = false;
+                        }
+                    });
+                });
+
+
+            this.$toast.add({
+                    severity:'success',
+                    summary: 'Successful',
+                    detail: 'Row Expand',
+                    life: 3000
+                });
+        },
+        onRowCollapse(event : any) {
+            console.log(event.data);
+            this.$toast.add({
+                    severity:'success',
+                    summary: 'Successful',
+                    detail: 'Row Collapse',
+                    life: 3000
+                });
+        },
+        makeAnAssociatedEventForContact(_contact : Contact) : void {
+            this.$router.push({ name: 'event', params: { contactID: _contact.ID }});
         },
 
         // #region API Calls

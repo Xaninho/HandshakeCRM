@@ -68,6 +68,7 @@ func main() {
 	r.GET("/activity/:id", controllers.ActivityShow)
 	r.PUT("/activity/:id", controllers.ActivityUpdate)
 	r.DELETE("/activity/:id", controllers.ActivityDelete)
+	r.GET("/activity/contact/:id", controllers.ActivityIndexByContact)
 
 	// EnumTypes
 	r.POST("/enumType", middleware.RequireAuth, controllers.EnumTypeCreate)

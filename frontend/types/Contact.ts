@@ -1,6 +1,7 @@
 import Agent from "./User";
 import Company from "./Company";
 import EnumType from "./EnumType";
+import Activity from "./Activity";
 
 export default class Contact {
 
@@ -15,6 +16,9 @@ export default class Contact {
 
     public Company : Company;
     public Disposition : EnumType;
+    public AssociatedActivities : Array<Activity>;
+
+    public isLoading : boolean = false;
 
     constructor() {
         this.ID = -1;
@@ -25,6 +29,7 @@ export default class Contact {
         this.CompanyId = 0
         this.DispositionId = 0;
         this.Company = new Company();
-        this.Disposition = new EnumType();	
+        this.Disposition = new EnumType();
+        this.AssociatedActivities = new Array<Activity>();
     }
 }

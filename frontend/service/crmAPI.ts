@@ -49,6 +49,9 @@ export default {
     getActivity(id: number) {
         return apiInstance.get(`/activity/${id}`);
     },
+    getActivitiesByContact(id: number) {
+        return apiInstance.get(`/activity/contact/${id}`);
+    },
 
     getCurrencies() {
         return apiInstance.get('/currency');

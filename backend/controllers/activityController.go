@@ -52,6 +52,19 @@ func ActivityIndex(c *gin.Context) {
 	})
 }
 
+func ActivityIndexByContact(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var activities []models.Activity
+	initializers.DB.Preload("Contact").Preload("User").Preload("Outcome").Where("contact_id = ?", id).Find(&activities)
+
+	c.JSON(200, gin.H{
+		"activities": activities,
+	})
+
+}
+
 func ActivityShow(c *gin.Context) {
 	id := c.Param("id")
 
