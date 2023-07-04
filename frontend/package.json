@@ -16,6 +16,7 @@
     "@iconify-json/prime": "^1.1.4",
     "@iconify-json/twemoji": "^1.1.10",
     "@nuxt/content": "^2.4.3",
+    "@nuxt/devtools": "^0.6.6",
     "@nuxtjs/svg": "^0.4.0",
     "@pinia/nuxt": "^0.4.6",
     "@sfxcode/nuxt-primevue": "^1.0.0",
