@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@vueuse/nuxt',
     '@nuxt/devtools',
+    '@nuxtjs/tailwindcss',
   ],
   content: {
     highlight: {
