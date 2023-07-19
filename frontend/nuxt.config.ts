@@ -47,10 +47,12 @@ export default defineNuxtConfig({
     'primeicons/primeicons.css',
     '@sfxcode/formkit-primevue/dist/sass/formkit-prime-inputs.scss',
     '@sfxcode/formkit-primevue/dist/sass/formkit-primevue.scss',
+    'assets/styles/main.css'
   ],
   vite: {
     plugins: [
       svgLoader()
     ]
-  }
+  },
+  components: ['~/components']
 })
