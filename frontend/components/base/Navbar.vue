@@ -6,16 +6,13 @@
           <div>
             <img src="~/assets/images/handshake.png" class="w-24 xl:w-28" alt="Handshake CRM" style="width: 60px;" />
           </div>
-          <button class="rounded-lg lg:hidden focus:outline-none focus:shadow-outline" @click="open = !open">
-            <SegmentIcon v-if="!open" :size="24" />
-            <CloseIcon v-else :size="24" />
-          </button>
+
         </div>
       </div>
       <div :class="[open ? 'flex' : 'hidden lg:flex']" class="space-x-3">
         <base-button
           class="px-8 xl:px-10 py-3 mt-2 bg-inherit text-gradient border border-[#00E54B]"
-          @click="navigateToDashboard"
+          @click="navigateToLogin"
         >
           Login
         </base-button>
@@ -24,8 +21,8 @@
   </nav>
 </template>
 
-<script>
-const router = useRouter()
+<script lang="ts">
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'BaseNavbar',
@@ -33,14 +30,15 @@ export default {
     return {
       open: false,
       dropdownNavbar: false,
+      router: useRouter(),
     }
   },
   methods: {
     dropdownToggler () {
       this.dropdownNavbar = !this.dropdownNavbar
     },
-    navigateToDashboard () {
-      router.push("/dashboard");
+    navigateToLogin () {
+      this.router.push("/login");
     },
   }
 }

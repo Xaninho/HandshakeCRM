@@ -37,13 +37,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-const router = useRouter()
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Hero',
+  data() {
+    return {
+      router: useRouter(),
+    }
+  },
   methods: {
     navigateToDashboard () {
-      router.push("/dashboard");
+      this.router.push("/dashboard");
     },
   }
 })

@@ -1,14 +1,22 @@
 <template>
-  <div>
-    <h1>Login</h1>
-    <div class="flex flex-column gap-2">
-      <label for="email">Email</label>
-      <InputText id="email" v-model="email"/>
+  <div class="flex flex-col items-center justify-center min-h-screen">
+    <img src="~assets/images/handshake.png" class="w-32 h-32 mb-4" alt="Handshake Logo" />
+    <h1 class="text-center text-3xl font-bold mb-4">Login</h1>
+    <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
       
-      <label for="password">Password</label>
-      <Password v-model="password" :feedback="false" />
+      <label for="email" class="block text-gray-700 font-medium mb-2 w-full">Email</label>
+      <InputText id="email" v-model="email" class="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-green-500" />
+      
+      <label for="password" class="block text-gray-700 font-medium mb-2 w-full">Password</label>
+      <Password v-model="password" :feedback="false" class="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-green-500" />
 
-      <Button type="submit" @click="login">Login</Button>
+      <Button
+        type="submit"
+        @click="login"
+        class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-full flex items-center justify-center"
+      >
+        Login
+      </Button>
     </div>
   </div>
 </template>
@@ -64,32 +72,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.login-page {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-}
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 8px;
-}
-
-input[type="email"],
-input[type="password"] {
-  padding: 8px;
-  margin-bottom: 16px;
-}
-
-button[type="submit"] {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
 </style>

@@ -11,7 +11,7 @@ const apiInstance = axios.create({
     baseURL: API_BASE_URL,
 });
 
-const authCookie = useCookie("authHandshakeCRM");
+/*const authCookie = useCookie("authHandshakeCRM");
 apiInstance.interceptors.request.use((config) => {
 
     const authHandshakeCRM = authCookie.value;
@@ -19,7 +19,7 @@ apiInstance.interceptors.request.use((config) => {
       config.headers.Authorization = `${authHandshakeCRM}`;
     }
     return config;
-});
+});*/
 
 export default {
 
