@@ -1,9 +1,10 @@
 <template>
   <div class="card">
 
-    <div class="col-12 mt-10 text-center">
-      <img src="~/assets/Marylin.png" style="width:400px;">
+    <div class="col-12 mt-10 text-center d-flex justify-center align-center">
+      <img src="~/assets/images/warning.png" style="width:400px;">
     </div>
+
     <main class="text-center text-teal-700 text-8xl">
       <div>
         <p class="text-8xl text-red-600">

@@ -1,54 +1,50 @@
 <template>
-    <section class="relative">
-        <div class="container flex flex-col-reverse lg:flex-row items-center gap-12 mt-14 lg:mt-28">
-        <!-- Content -->
-        <div class="flex flex-1 flex-col items-center lg:items-start">
-            <h2 class="text-bookmark-blue text-3xl md:text-4 lg:text-5xl text-center lg:text-left mb-6">
-            A Simple Bookmark Manager
-            </h2>
-            <p class="text-bookmark-grey text-lg text-center lg:text-left mb-6">
-            A clean and simple interface to organize your favourite websites. Open a new browser tab and see your sites
-            load instantly. Try it for free.
-            </p>
-            <div class="flex justify-center flex-wrap gap-6">
-            <button type="button" class="btn btn-purple hover:bg-bookmark-white hover:text-black">
-                Get it on Chrome
-            </button>
-            <button type="button" class="btn btn-white hover:bg-bookmark-purple hover:text-white">
-                Get it on Firefox
-            </button>
-            </div>
-        </div>
-        <!-- Image -->
-        <div class="flex justify-center flex-1 mb-10 md:mb-16 lg:mb-0 z-10">
-            <img class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 md:w-full md:h-full" src="~/assets/images/hero-bg.png" alt="" />
-        </div>
-        </div>
-        <!-- Rounded Rectangle -->
+  <section id="hero" class="w-full pb-24">
+    <BaseSection>
+      <div class="col-span-12 lg:col-span-6 mt-12 xl:mt-10 space-y-4 sm:space-y-6 px-6 text-center sm:text-left" style="padding-top: 30px;">
+        <h1
+          data-aos="fade-right"
+          data-aos-once="true"
+          class="text-[2.5rem] sm:text-5xl xl:text-6xl font-bold leading-tight capitalize sm:pr-8 xl:pr-10"
+        >
+          Revolutionize Business Management
+        </h1>
+        <p data-aos="fade-down" data-aos-once="true" data-aos-delay="300" class="paragraph hidden sm:block">
+          Streamline tasks, enhance customer relationships, and supercharge growth with our intuitive CRM solution designed to elevate your business success.
+        </p>
         <div
-        class="
-            hidden
-            md:block
-            overflow-hidden
-            bg-bookmark-purple
-            rounded-l-full
-            absolute
-            h-80
-            w-2/4
-            top-32
-            right-0
-            lg:
-            -bottom-28
-            lg:-right-36
-        "
-        ></div>
-    </section>
+          data-aos="fade-up"
+          data-aos-once="true"
+          data-aos-delay="700"
+          class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-2"
+        >
+          <BaseButton
+            class="max-w-full px-8 py-4 bg-gradient-to-r from-[#00D4B0] to-[#00E54B] border border-[#00D4B0 text-white"
+            @click="navigateToDashboard"
+            >
+            Enter App
+          </BaseButton>
+        </div>
+      </div>
+      <div class="hidden sm:block col-span-12 lg:col-span-6">
+        <div class="w-full">
+          <img class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 md:w-full md:h-full" src="~/assets/images/hero-bg.png" alt="" />
+        </div>
+      </div>
+    </BaseSection>
+  </section>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+const router = useRouter()
 
 export default defineComponent({
-  name: 'Hero'
+  name: 'Hero',
+  methods: {
+    navigateToDashboard () {
+      router.push("/dashboard");
+    },
+  }
 })
 </script>

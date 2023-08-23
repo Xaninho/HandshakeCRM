@@ -1,36 +1,19 @@
 <template>
-    <section class="bg-bookmark-white py-20">
-      <div class="container">
-        <!-- Heading -->
-        <div class="sm:w-3/4 lg:w-5/12 mx-auto px-2">
-          <h1 class="text-3xl text-center text-bookmark-blue">Frequently Asked Questions</h1>
-          <p class="text-center text-bookmark-grey mt-4">
-            Here are some of our FAQs. If you have any other questions you’d like answered please feel free to email us.
-          </p>
+   <section class="w-full my-24">
+      <BaseSection>
+        <div data-aos="fade-left" data-aos-delay="150" class="col-span-12 lg:col-span-6 px-4 sm:px-6 mt-8">
+          <h2 class="text-3xl sm:text-4xl font-semibold mb-10 sm:mb-6">Frequently asked questions</h2>
+
+          <ul class="shadow-box">
+            <BaseAccordion v-for="(accordion, index) in accordions" :key="index" :accordion="accordion" />
+          </ul>
         </div>
-        <!-- FAQ Items -->
-        <div class="flex flex-col sm:w-3/4 lg:w-5/12 mt-12 mx-auto">
-          <div class="flex items-center border-b py-4">
-            <span class="flex-1">What is a Bookmark?</span>
-            <i class="text-bookmark-purple fas fa-chevron-down"></i>
+        <div data-aos="fade-right" data-aos-delay="150" class="col-span-12 lg:col-span-6">
+          <div class="w-full" style="padding-top: 100px">
+            <img src="assets/images/faq.png" class="w-full" alt="" />
           </div>
-          <div class="flex items-center border-b py-4">
-            <span class="flex-1">How can I request a new browser?</span>
-            <i class="text-bookmark-purple fas fa-chevron-down"></i>
-          </div>
-          <div class="flex items-center border-b py-4">
-            <span class="flex-1">Is there a mobile app?</span>
-            <i class="text-bookmark-purple fas fa-chevron-down"></i>
-          </div>
-          <div class="flex items-center border-b py-4">
-            <span class="flex-1">What about other Chromium browsers?</span>
-            <i class="text-bookmark-purple fas fa-chevron-down"></i>
-          </div>
-          <button type="button" class="mt-12 flex self-center btn btn-purple hover:bg-bookmark-white hover:text-black">
-            More Info
-          </button>
         </div>
-      </div>
+      </BaseSection>
     </section>
   </template>
 
@@ -38,6 +21,27 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'FAQ'
+  name: 'FAQ',
+  data() {
+    return {
+      accordions: [
+        {
+          title: 'How does Handshake benefit my business?',
+          description:
+            "Handshake CRM transforms your business operations by centralizing customer data, automating tasks, and providing insights to make informed decisions. It helps you nurture leads, improve customer satisfaction, and drive growth.",
+        },
+        {
+          title: 'How secure is the data stored in Handshake CRM',
+          description:
+            "At Handshake, security is paramount. We employ robust encryption protocols and advanced security measures to safeguard your data. Our commitment to data protection ensures your information remains confidential and secure.",
+        },
+        {
+          title: 'How is customer support handled with Handshake CRM',
+          description:
+            "We take pride in providing excellent customer support. Our dedicated team is available to assist you through various channels, ensuring you receive timely assistance whenever you need it.",
+        }
+      ]
+    }
+  }
 })
 </script>

@@ -1,12 +1,15 @@
 <template>
-    
-    <Header />
-    <HeroSection />
-    <Features />
-    <FAQ />
-    <ContactUs />
-    <Footer />
+  <div class="w-full">
+      
+      <BaseNavbar />
+      <HeroSection />
+      <GeneralInfo />
+      <Features />
+      <TrustedTechnologies />
+      <FAQ />
+      <Footer />
 
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,9 +22,10 @@ import { defineComponent } from 'vue'
 import Header from '~/components/landingPage/Header.vue'
 import HeroSection from '~/components/landingPage/Hero.vue'
 import Features from '~/components/landingPage/Features.vue'
-import ContactUs from '~/components/landingPage/ContactUs.vue'
-import Footer from '~/components/landingPage/Footer.vue'
+import GeneralInfo from '~/components/landingPage/GeneralInfo.vue'
 import FAQ from '~/components/landingPage/FAQ.vue'
+import TrustedTechnologies from '~/components/landingPage/TrustedTechnologies.vue'
+import Footer from '~/components/landingPage/Footer.vue'
 
 export default defineComponent({
   name: 'Index',
@@ -29,10 +33,21 @@ export default defineComponent({
     Header,
     HeroSection,
     Features,
-    ContactUs,
-    Footer,
-    FAQ
+    GeneralInfo,
+    FAQ,
+    TrustedTechnologies,
+    Footer
   }
 })
 
 </script>
+
+<style>
+
+.bg-partner {
+  background: url('../assets/images/technologies/background.png');
+  background-size: cover;
+  background-position: center;
+}
+
+</style>

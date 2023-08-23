@@ -1,6 +1,6 @@
 <template>
     <header>
-        <nav class="container flex items-center py-4 mt-4 sm:mt-12">
+        <nav class="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-0">
         <div class="py-1"><img src="~/assets/images/logo-bookmark.svg" /></div>
         <ul class="hidden sm:flex flex-1 justify-end items-center gap-12 text-bookmark-blue uppercase text-xs">
             <li class="cursor-pointer">Features</li>
@@ -20,8 +20,20 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'Header',
+  // create a data section with an array
+  data() {
+    return {
+      navigation: [
+        "Product",
+        "Features",
+        "Pricing",
+        "Company",
+        "Blog",
+      ]
+    }
+  },
   methods: {
-    redirectToLoginPage() {
+    redirectToLoginPage() : void {
       this.$router.push('/login')
     }
   }
